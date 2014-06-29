@@ -1,7 +1,8 @@
 # wayfarer
 [![NPM version][npm-image]][npm-url] [![build status][travis-image]][travis-url] [![Test coverage][coveralls-image]][coveralls-url]
 
-A simple trie based router built for minimalism and speed. Works best with 
+A simple [trie based](https://github.com/jonathanong/routington/) 
+router built for minimalism and speed. Works best with 
 [React](facebook.github.io/react) and [Browserify](github.com/substack/browserify).
 
 ## Installation
