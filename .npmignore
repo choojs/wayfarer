@@ -1,0 +1,14 @@
+# Config
+.gitignore
+.npmignore
+.travis.yml
+
+# Folders
+benchmarks/
+coverage/
+docs/
+examples/
+test/
+
+# Files
+test.js
