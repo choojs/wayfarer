@@ -53,5 +53,5 @@ wayfarer.path = function(path, cb) {
  
 wayfarer.match = function(path) {
   var match = this.router.match(path);
-  match.node.cb();
+  return match.node.cb();
 }
