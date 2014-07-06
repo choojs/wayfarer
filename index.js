@@ -48,10 +48,13 @@ wayfarer.path = function(path, cb) {
 /**
  * Math a route against the paths.
  *
+ * @param {String} path
+ * @return {Any}
  * @api public
  */
  
 wayfarer.match = function(path) {
+  assert('string' == typeof path, 'Path should be a string');
   var match = this.router.match(path);
   return match.node.cb();
 }
