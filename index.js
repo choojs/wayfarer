@@ -27,11 +27,14 @@ module.exports = Wayfarer;
 function Wayfarer() {
   if (!(this instanceof Wayfarer)) return new Wayfarer();
   this.router = router();
+  this.defaultPath = '';
 }
  
 /**
  * Define a new path.
  *
+ * @param {String} path
+ * @param {Function} cb
  * @return {Wayfarer}
  * @api public
  */
@@ -42,6 +45,21 @@ wayfarer.path = function(path, cb) {
   var node = this.router.define(path)[0];
   node.cb = cb;
   
+  return this;
+}
+
+/**
+ * Define the default path.
+ *
+ * @param {String} path
+ * @return {Wayfarer}
+ * @api public
+ */
+
+wayfarer.default = function(path) {
+  assert('string' == typeof path, 'Path should be a string');
+  this.defaultPath = path;
+
   return this;
 }
  
@@ -56,5 +74,6 @@ wayfarer.path = function(path, cb) {
 wayfarer.match = function(path) {
   assert('string' == typeof path, 'Path should be a string');
   var match = this.router.match(path);
+  if (!match) match = this.router.match(this.defaultPath);
   return match.node.cb();
 }
