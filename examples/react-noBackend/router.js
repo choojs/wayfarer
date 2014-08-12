@@ -33,7 +33,7 @@ module.exports = react.createClass({
 
 function componentWillMount() {
   dispatcher.dispatch('path_initialize');
-  this.setState({path: pathStore.get(0)});
+  this.setState({path: pathStore.get(0).path});
 }
 
 /**
