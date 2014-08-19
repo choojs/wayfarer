@@ -1,14 +1,14 @@
 /**
  * Module dependencies
  */
- 
+
 var should = require('should');
 var wayfarer = require('./index.js');
- 
+
 /**
  * Test
  */
- 
+
 describe('wayfarer()', function () {
   it('should initialize with empty properties', function() {
     var router = wayfarer();
@@ -36,8 +36,8 @@ describe('.default()', function () {
   });
   it('should set a default path', function() {
     var router = wayfarer();
-    router.default('404');
-    router.defaultPath.should.eql('404');
+    router.default('/404');
+    router.defaultPath.should.eql('/404');
   });
 });
 
@@ -69,4 +69,3 @@ describe('.match()', function () {
     router.match('/anotherPath');
   });
 });
-
