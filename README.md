@@ -12,16 +12,10 @@ $ npm i --save wayfarer
 
 ## Overview
 ```js
-/**
- * Initialize wayfarer.
- */
-
 var wayfarer = require('wayfarer');
 var router = wayfarer();
 
-/**
- * Register routes.
- */
+// Register routes.
 
 router
   .default('/404')
@@ -30,40 +24,34 @@ router
   .path('/404', function() {console.log('/404')})
   .path('/:user', function() {console.log('/user')});
 
-/**
- * Match a route.
- */
+// Match a route.
 
 router.match('/tobi')
 // => '/user'
 ```
 
 ## API
-#### .path()
+#### .path(path, cb)
+Register a new path. Partial paths are supported through the /: operator.
+Wayfarer uses a trie to match routes, so the order in which routes are
+registered does not matter.
 ```js
-// Register a new path. Takes a {String} pathName that calls a
-// {Function} callback. Partial paths are supported through the /: operator.
-// Wayfarer uses a trie to match routes, so the order in which routes are
-// registered does not matter.
-
 router.path('/', function() {console.log('do stuff')});
 router.path('/:user', function() {console.log('do user stuff')});
 ```
 
-#### .default()
+#### .default(defaultPath)
+Sets a default path to match. This is particularly
+useful for setting 404 pages.
 ```js
-// Set a {String} pathName as the default path to match. This is particularly
-// useful for setting 404 pages.
-
 router.default('/404');
 router.path('/404', function() {console.log('sunglasses not found')});
 ```
 
-#### .match()
+#### .match(path)
+Match a path against the saved paths in the router. If a match is
+found the registered callback will be executed.
 ```js
-// Match a {String} path against the saved paths in the router. If a match is
-// found the registered callback will be executed.
-
 router.match('/tobi');
 // => 'do user stuff'
 ```
