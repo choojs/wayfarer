@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/yoshuawuyts/wayfarer",
   "dependencies": {
-    "routington": "^0.1.3"
+    "routington": "^1.0.2"
   },
   "devDependencies": {
     "coveralls": "^2.10.0",
