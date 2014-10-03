@@ -23,10 +23,10 @@ var router = wayfarer();
 
 router
   .default('/404')
-  .path('/', function() {console.log('/')})
-  .path('/home', function() {console.log('/home')})
-  .path('/404', function() {console.log('/404')})
-  .path('/:user', function() {console.log('/user')});
+  .route('/', function() {console.log('/')})
+  .route('/home', function() {console.log('/home')})
+  .route('/404', function() {console.log('/404')})
+  .route('/:user', function() {console.log('/user')});
 
 // Match a route.
 
@@ -35,13 +35,13 @@ router.match('/tobi')
 ```
 
 ## API
-#### .path(path, cb)
+#### .route(path, cb)
 Register a new path. Partial paths are supported through the /: operator.
 Wayfarer uses a trie to match routes, so the order in which routes are
 registered does not matter.
 ```js
-router.path('/', function() {console.log('do stuff')});
-router.path('/:user', function() {console.log('do user stuff')});
+router.route('/', function() {console.log('do stuff')});
+router.route('/:user', function() {console.log('do user stuff')});
 ```
 
 #### .default(defaultPath)
@@ -49,7 +49,7 @@ Sets a default path to match. This is particularly
 useful for setting 404 pages.
 ```js
 router.default('/404');
-router.path('/404', function() {console.log('sunglasses not found')});
+router.route('/404', function() {console.log('sunglasses not found')});
 ```
 
 #### .match(path)
