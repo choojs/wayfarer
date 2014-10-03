@@ -69,3 +69,10 @@ describe('.match()', function () {
     router.match('/anotherPath');
   });
 });
+
+describe('aliases', function() {
+  it('.route == .path', function() {
+    var router = wayfarer();
+    router.path.should.eql(router.route);
+  });
+});
