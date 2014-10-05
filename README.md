@@ -2,7 +2,6 @@
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
-[![Dependency Status][david-image]][david-url]
 [![Downloads][downloads-image]][downloads-url]
 
 A simple [trie based](https://github.com/jonathanong/routington/)
@@ -70,7 +69,5 @@ router.match('/tobi');
 [travis-url]: https://travis-ci.org/yoshuawuyts/wayfarer
 [coveralls-image]: https://img.shields.io/coveralls/yoshuawuyts/wayfarer.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/yoshuawuyts/wayfarer?branch=master
-[david-image]: http://img.shields.io/david/yoshuawuyts/wayfarer.svg?style=flat-square
-[david-url]: https://david-dm.org/yoshuawuyts/wayfarer
 [downloads-image]: http://img.shields.io/npm/dm/wayfarer.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/wayfarer
