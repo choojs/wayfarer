@@ -15,12 +15,11 @@ $ npm i --save wayfarer
 
 ## Overview
 ```js
-var wayfarer = require('wayfarer');
-var router = wayfarer();
+var router = require('wayfarer');
 
 // Register routes.
 
-router
+router({qs: false})
   .default('/404')
   .route('/', function() {console.log('/')})
   .route('/home', function() {console.log('/home')})
@@ -34,8 +33,15 @@ router.match('/tobi')
 ```
 
 ## API
+#### wayfarer(opts)
+Initialize wayfarer with options. Setting `qs` to stops wayfarer from triggering
+on changes to the querystring.
+```js
+var router = wayfarer({qs: true});
+```
+
 #### .route(path, cb)
-Register a new path. Partial paths are supported through the /: operator.
+Register a new path. Partial paths are supported through the `/:` operator.
 Wayfarer uses a trie to match routes, so the order in which routes are
 registered does not matter.
 ```js

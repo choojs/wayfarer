@@ -34,6 +34,7 @@ describe('.default()', function () {
     router.default.bind(router, 123)
       .should.throw('Path should be a string');
   });
+
   it('should set a default path', function() {
     var router = wayfarer();
     router.default('/404');
@@ -50,6 +51,7 @@ describe('.match()', function () {
 
     router.match('/hello');
   });
+
   it('should match dynamic routes', function (done) {
     var router = wayfarer();
     router
@@ -58,6 +60,7 @@ describe('.match()', function () {
 
     router.match('/tobi');
   });
+
   it('should match the default path if no other paths match', function (done) {
     var router = wayfarer();
     router
@@ -67,6 +70,17 @@ describe('.match()', function () {
       .default('/404');
 
     router.match('/anotherPath');
+  });
+
+  it('should accept qs options', function() {
+    var router = wayfarer({qs: false});
+    router
+      .path('/hello', function() {done()})
+      .path('/howdy', function() {})
+      .path('/404', function() {})
+      .default('/404');
+
+    router.match('/hello?hello=false');
   });
 });
 

@@ -24,10 +24,12 @@ module.exports = Wayfarer;
  * @api public
  */
 
-function Wayfarer() {
-  if (!(this instanceof Wayfarer)) return new Wayfarer();
+function Wayfarer(opts) {
+  if (!(this instanceof Wayfarer)) return new Wayfarer(opts);
+  assert(!opts || 'object' == typeof opts, 'wayfarer: pts should be an object');
   this.router = router();
   this.defaultPath = '';
+  this._opts = opts || {};
 }
 
 /**
@@ -73,8 +75,13 @@ wayfarer.default = function(path) {
 
 wayfarer.match = function(path) {
   assert('string' == typeof path, 'Path should be a string');
+
+  var nwPath = path;
+  if (!this._opts.qs) nwPath = path.split('?')[0];
+
   var match = this.router.match(path);
   if (!match) match = this.router.match(this.defaultPath);
+
   return match.node.cb();
 }
 
