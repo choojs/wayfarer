@@ -10,7 +10,7 @@ router built for minimalism and speed. Works best with
 
 ## Installation
 ```bash
-$ npm i --save wayfarer
+npm install wayfarer
 ```
 
 ## Overview
@@ -24,12 +24,9 @@ router({qs: false})
   .route('/', function() {console.log('/')})
   .route('/home', function() {console.log('/home')})
   .route('/404', function() {console.log('/404')})
-  .route('/:user', function() {console.log('/user')});
-
-// Match a route.
-
-router.match('/tobi')
-// => '/user'
+  .route('/:user', function() {console.log('/user')})
+  .match('/tobi');
+  // => '/user'
 ```
 
 ## API
@@ -66,8 +63,7 @@ router.match('/tobi');
 ```
 
 ## License
-[MIT](https://tldrlegal.com/license/mit-license) ©
-[Yoshua Wuyts](i@yoshuawuyts.com)
+[MIT](https://tldrlegal.com/license/mit-license)
 
 [npm-image]: https://img.shields.io/npm/v/wayfarer.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wayfarer
