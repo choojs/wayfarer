@@ -6,7 +6,7 @@
 
 A simple [trie based](https://github.com/jonathanong/routington/)
 router built for minimalism and speed. Works best with
-[React](facebook.github.io/react) and [Browserify](github.com/substack/browserify).
+[Browserify](github.com/substack/browserify).
 
 ## Installation
 ```bash
@@ -31,10 +31,10 @@ router({qs: false})
 
 ## API
 #### wayfarer(opts)
-Initialize wayfarer with options. Setting `qs` to stops wayfarer from triggering
-on changes to the querystring.
+Initialize wayfarer with options. Setting `qs` to false stops wayfarer from
+triggering on changes to the querystring.
 ```js
-var router = wayfarer({qs: true});
+var router = wayfarer({qs: false});
 ```
 
 #### .route(path, cb)
