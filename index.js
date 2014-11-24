@@ -82,7 +82,7 @@ wayfarer.match = function(path) {
   var match = this.router.match(path);
   if (!match) match = this.router.match(this.defaultPath);
 
-  return match.node.cb();
+  return match.node.cb(match ? match.param : {});
 }
 
 /**
