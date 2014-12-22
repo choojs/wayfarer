@@ -62,6 +62,9 @@ router.match('/tobi');
 // => 'do user stuff'
 ```
 
+## See Also
+- [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
+
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
 
