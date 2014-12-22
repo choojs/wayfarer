@@ -46,9 +46,7 @@ Partial paths are supported through the `/:` operator, and the callback
 provides a param object. With a route like `/:user` if you navigated to
 `/somename`, you'd get a param object like this: `{ user: 'somename' }`.
 ```js
-router.route('/:user', (param) => {
-  console.log('do user stuff', param.user)
-})
+router.on('/:user', (param) => console.log('do user stuff', param.user))
 ```
 
 #### .match(path)
