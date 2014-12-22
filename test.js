@@ -26,18 +26,8 @@ describe('.path()', function () {
     router.path.bind(router, '/hi', function(){})
       .should.not.throw();
   });
-});
-
-describe('.default()', function () {
-  it('should catch errors', function() {
-    var router = wayfarer();
-    router.default.bind(router, 123)
-      .should.throw('Path should be a string');
-  });
-
   it('should set a default path', function() {
-    var router = wayfarer();
-    router.default('/404');
+    var router = wayfarer({ default: '/404' });
     router.defaultPath.should.eql('/404');
   });
 });
@@ -62,23 +52,21 @@ describe('.match()', function () {
   });
 
   it('should match the default path if no other paths match', function (done) {
-    var router = wayfarer();
+    var router = wayfarer({ default: '/404' });
     router
       .path('/hello', function() {})
       .path('/howdy', function() {})
       .path('/404', function() {done()})
-      .default('/404');
 
     router.match('/anotherPath');
   });
 
-  it('should accept qs options', function() {
-    var router = wayfarer({qs: false});
+  it('should not match queryStrings', function(done) {
+    var router = wayfarer({ default: '/404' });
     router
       .path('/hello', function() {done()})
       .path('/howdy', function() {})
-      .path('/404', function() {})
-      .default('/404');
+      .path('/404', function() {});
 
     router.match('/hello?hello=false');
   });

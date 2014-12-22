@@ -10,31 +10,29 @@ router built for minimalism and speed. Works best with
 
 ## Installation
 ```bash
-npm install wayfarer
+$ npm install wayfarer
 ```
 
 ## Overview
 ```js
-var router = require('wayfarer');
+const wayfarer = require('wayfarer');
 
-// Register routes.
+const router = wayfarer({ default: '/404' })
 
-router({qs: false})
-  .default('/404')
-  .route('/', function() {console.log('/')})
-  .route('/home', function() {console.log('/home')})
-  .route('/404', function() {console.log('/404')})
-  .route('/:user', function() {console.log('/user')})
-  .match('/tobi');
-  // => '/user'
+router.route('/', () => console.log('/'))
+router.route('/404', () => console.log('/404'))
+router.route('/:user', () => console.log('/user'))
+
+router.match('/tobi');
+// => '/:user'
 ```
 
 ## API
 #### wayfarer(opts)
-Initialize wayfarer with options. Setting `qs` to false stops wayfarer from
-triggering on changes to the querystring.
+Initialize wayfarer with options. `default` allows setting a default path
+to match if none other match. Ignores query strings.
 ```js
-var router = wayfarer({qs: false});
+const router = wayfarer({ default: '/404' })
 ```
 
 #### .route(path, cb)
@@ -42,16 +40,8 @@ Register a new path. Partial paths are supported through the `/:` operator.
 Wayfarer uses a trie to match routes, so the order in which routes are
 registered does not matter.
 ```js
-router.route('/', function() {console.log('do stuff')});
-router.route('/:user', function() {console.log('do user stuff')});
-```
-
-#### .default(defaultPath)
-Sets a default path to match. This is particularly
-useful for setting 404 pages.
-```js
-router.default('/404');
-router.route('/404', function() {console.log('sunglasses not found')});
+router.route('/', () => console.log('do stuff'))
+router.route('/:user', () => console.log('do user stuff'))
 ```
 
 #### .match(path)
