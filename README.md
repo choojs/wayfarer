@@ -12,9 +12,9 @@ Modular [trie based](https://github.com/jonathanong/routington/) based router. W
 $ npm install wayfarer
 ```
 
-## Overview
+## Usage
 ```js
-const wayfarer = require('wayfarer');
+const wayfarer = require('wayfarer')
 
 const router = wayfarer({ default: '/404' })
 
@@ -22,7 +22,7 @@ router.on('/', () => console.log('/'))
 router.on('/404', () => console.log('/404'))
 router.on('/:user', () => console.log('/user'))
 
-router.match('/tobi');
+router.match('/tobi')
 // => '/:user'
 ```
 
@@ -47,7 +47,7 @@ router.on('/:user', () => console.log('do user stuff'))
 Match a path against the saved paths in the router. If a match is
 found the registered callback will be executed.
 ```js
-router.match('/tobi');
+router.match('/tobi')
 // => 'do user stuff'
 ```
 
