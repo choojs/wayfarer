@@ -38,12 +38,21 @@ var router = wayfarer({qs: false});
 ```
 
 #### .route(path, cb)
-Register a new path. Partial paths are supported through the `/:` operator.
-Wayfarer uses a trie to match routes, so the order in which routes are
-registered does not matter.
+Register a new path. Wayfarer uses a trie to match routes, so the order in 
+which routes are registered does not matter.
+
 ```js
 router.route('/', function() {console.log('do stuff')});
-router.route('/:user', function() {console.log('do user stuff')});
+```
+
+Partial paths are supported through the `/:` operator, and the callback 
+provides a param object. With a route like `/:user` if you navigated to 
+`/somename`, you'd get a param object like this: `{ user: 'somename' }`.
+
+```js
+router.route('/:user', function(param) {
+  console.log('do user stuff', param.user);
+});
 ```
 
 #### .default(defaultPath)
