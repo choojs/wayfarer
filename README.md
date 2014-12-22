@@ -4,8 +4,7 @@
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
 
-A simple [trie based](https://github.com/jonathanong/routington/)
-router built for minimalism and speed. Works best with
+Modular [trie based](https://github.com/jonathanong/routington/) based router. Works best with
 [Browserify](github.com/substack/browserify).
 
 ## Installation
@@ -19,9 +18,9 @@ const wayfarer = require('wayfarer');
 
 const router = wayfarer({ default: '/404' })
 
-router.route('/', () => console.log('/'))
-router.route('/404', () => console.log('/404'))
-router.route('/:user', () => console.log('/user'))
+router.on('/', () => console.log('/'))
+router.on('/404', () => console.log('/404'))
+router.on('/:user', () => console.log('/user'))
 
 router.match('/tobi');
 // => '/:user'
@@ -35,13 +34,13 @@ to match if none other match. Ignores query strings.
 const router = wayfarer({ default: '/404' })
 ```
 
-#### .route(path, cb)
+#### .on(path, cb)
 Register a new path. Partial paths are supported through the `/:` operator.
-Wayfarer uses a trie to match routes, so the order in which routes are
+Wayfarer uses a trie structure to match routes, so the order in which routes are
 registered does not matter.
 ```js
-router.route('/', () => console.log('do stuff'))
-router.route('/:user', () => console.log('do user stuff'))
+router.on('/', () => console.log('do stuff'))
+router.on('/:user', () => console.log('do user stuff'))
 ```
 
 #### .match(path)

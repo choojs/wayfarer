@@ -21,7 +21,7 @@ function Wayfarer(opts) {
 // @param {String} path
 // @param {Function} cb
 // @return {Wayfarer}
-wayfarer.path = function(path, cb) {
+wayfarer.on = function(path, cb) {
   assert('string' == typeof path, 'Path should be a string')
   assert('function' == typeof cb, 'Callback should be a function')
   var node = this.router.define(path)[0]
@@ -45,5 +45,5 @@ wayfarer.match = function(path) {
 }
 
 // Aliases.
-wayfarer.path = wayfarer.path
-wayfarer.route = wayfarer.path
+wayfarer.path = wayfarer.on
+wayfarer.route = wayfarer.on
