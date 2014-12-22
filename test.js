@@ -50,6 +50,17 @@ describe('.match()', function () {
 
     router.match('/tobi');
   });
+  
+  it('should provide param object on dynamic routes', function (done) {
+    var router = wayfarer();
+    router
+    .path('/:user', function(param) {
+      param.should.have.property('user', 'tobi');
+      done();
+    });
+    
+    router.match('/tobi');
+  });
 
   it('should match the default path if no other paths match', function (done) {
     var router = wayfarer({ default: '/404' });

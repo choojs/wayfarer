@@ -35,12 +35,20 @@ const router = wayfarer({ default: '/404' })
 ```
 
 #### .on(path, cb)
-Register a new path. Partial paths are supported through the `/:` operator.
-Wayfarer uses a trie structure to match routes, so the order in which routes are
-registered does not matter.
+Register a new path. Wayfarer uses a trie to match routes, so the order in
+which routes are registered does not matter.
 ```js
 router.on('/', () => console.log('do stuff'))
 router.on('/:user', () => console.log('do user stuff'))
+```
+
+Partial paths are supported through the `/:` operator, and the callback
+provides a param object. With a route like `/:user` if you navigated to
+`/somename`, you'd get a param object like this: `{ user: 'somename' }`.
+```js
+router.route('/:user', (param) => {
+  console.log('do user stuff', param.user)
+})
 ```
 
 #### .match(path)
