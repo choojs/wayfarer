@@ -50,15 +50,15 @@ describe('.match()', function () {
 
     router.match('/tobi');
   });
-  
+
   it('should provide param object on dynamic routes', function (done) {
     var router = wayfarer();
     router
-    .path('/:user', function(param) {
+    .path('/:user', function(uri, param) {
       param.should.have.property('user', 'tobi');
       done();
     });
-    
+
     router.match('/tobi');
   });
 
