@@ -23,7 +23,7 @@ router.on('/404', () => console.log('/404'))
 router.on('/:user', () => console.log('/user'))
 
 router.match('/tobi')
-// => '/:user'
+// => '/user'
 ```
 
 ## API
@@ -46,7 +46,20 @@ Partial paths are supported through the `/:` operator, and the callback
 provides a param object. With a route like `/:user` if you navigated to
 `/somename`, you'd get a param object like this: `{ user: 'somename' }`.
 ```js
-router.on('/:user', (uri, param) => console.log('do user stuff', param.user))
+router.on('/:user', (uri, param) => console.log('my name is ', param.user))
+```
+
+Nested routers are supported by passing in `.match()` as the callback to
+another router.
+```js
+const main = wayfarer()
+const sub  = wayfarer()
+
+main.on('/foo', sub.match.bind(sub))
+sub.on('/foo/bar'), (uri) => console.log(uri))
+
+main.match('/foo/bar')
+// '/foo/bar'
 ```
 
 #### .match(path)
