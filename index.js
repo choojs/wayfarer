@@ -41,7 +41,7 @@ wayfarer.match = function(path) {
   var match = this.router.match(nw)
   if (!match) match = this.router.match(this.defaultPath)
 
-  return match.node.cb(match ? match.param : {})
+  return match.node.cb(path, match ? match.param : {})
 }
 
 // Aliases.

@@ -46,7 +46,7 @@ Partial paths are supported through the `/:` operator, and the callback
 provides a param object. With a route like `/:user` if you navigated to
 `/somename`, you'd get a param object like this: `{ user: 'somename' }`.
 ```js
-router.on('/:user', (param) => console.log('do user stuff', param.user))
+router.on('/:user', (uri, param) => console.log('do user stuff', param.user))
 ```
 
 #### .match(path)
@@ -59,6 +59,7 @@ router.match('/tobi')
 
 ## See Also
 - [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
+- [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip a url to only match the pathname
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
