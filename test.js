@@ -64,7 +64,7 @@ test('.match() should not match queryStrings', function(t) {
   router.match('/404?derp=darp')
 })
 
-test('.match() should allow nested routers', function(t) {
+test('.match() should provide the uri string to callback', function(t) {
   t.plan(1)
   const router = wayfarer()
   const sub = wayfarer()
