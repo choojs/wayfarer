@@ -4,8 +4,8 @@
   "description": "A simple router built for minimalism and speed",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --recursive --harmony-generators -R spec",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report text --recursive -- -R spec && rm -rf ./coverage/"
+    "test": "NODE_ENV=test tape test.js | tap-bail | tap-spec",
+    "test-cov": "NODE_ENV=test istanbul cover test.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,9 @@
     "coveralls": "^2.10.0",
     "istanbul": "^0.2.11",
     "mocha": "^1.20.1",
-    "should": "^4.0.4"
+    "should": "^4.0.4",
+    "tap-bail": "0.0.0",
+    "tap-spec": "^2.1.2",
+    "tape": "^3.0.3"
   }
 }
