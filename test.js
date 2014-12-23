@@ -1,96 +1,81 @@
-/**
- * Module dependencies
- */
 
-var should = require('should');
-var wayfarer = require('./index.js');
+const test     = require('tape')
+const should   = require('should')
+const wayfarer = require('./index.js')
 
-/**
- * Test
- */
+test('wayfarer() should initialize with empty properties', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  t.equal(router.defaultPath, '')
+})
 
-describe('wayfarer()', function () {
-  it('should initialize with empty properties', function() {
-    var router = wayfarer();
-    router.defaultPath.should.be.empty;
-  });
-});
+test('wayfarer should set accept a default path', function(t) {
+  t.plan(1)
+  const router = wayfarer({ default: '/404' })
+  t.equal(router.defaultPath, '/404')
+})
 
-describe('.on()', function () {
-  it('should catch type errors', function () {
-    var router = wayfarer();
-    router.on.bind(router, 123)
-      .should.throw('Path should be a string');
-    router.on.bind(router, '/hi', 123)
-      .should.throw('Callback should be a function');
-    router.on.bind(router, '/hi', function(){})
-      .should.not.throw();
-  });
-  it('should set a default path', function() {
-    var router = wayfarer({ default: '/404' });
-    router.defaultPath.should.eql('/404');
-  });
-});
+test('.on() should catch type errors', function(t) {
+  t.plan(2)
+  const router = wayfarer()
+  t.throws(router.on.bind(router, 123), /string/)
+  t.throws(router.on.bind(router, '/hi', 123), /function/)
+})
 
-describe('.match()', function () {
-  it('should match simple routes', function (done) {
-    var router = wayfarer();
-    router
-      .on('/hello', function(){done()})
-      .on('/hi', function(){});
+test('.match() should match simple routes', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  router.on('/hello', function() { t.ok(true, 'correct path called') })
+  router.on('/hi', function() { t.ok(false, 'incorrect path called') })
+  router.match('/hello')
+})
 
-    router.match('/hello');
-  });
+test('.match() should match dynamic routes', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  router.on('/hi', function() { t.ok(false, 'incorrect path called') })
+  router.on('/:user', function() { t.ok(true, 'correct path called') })
+  router.match('/tobi')
+})
 
-  it('should match dynamic routes', function (done) {
-    var router = wayfarer();
-    router
-      .on('/hello', function() {})
-      .on('/:user', function() {done()});
+test('.match() should provide param object on dynamic routes', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  router.on('/hi', function() { t.ok(false, 'incorrect path called') })
+  router.on('/:user', function(uri, param) { t.equal(param.user, 'tobi') })
+  router.match('/tobi')
+})
 
-    router.match('/tobi');
-  });
+test('.match() should match the default path if no matches found', function(t) {
+  t.plan(1)
+  const router = wayfarer({ default: '/404' })
+  router.on('/hi', function() { t.ok(false, 'incorrect path called') })
+  router.on('/howdy', function() { t.ok(false, 'incorrect path called') })
+  router.on('/404', function() { t.ok(true, 'correct path called') })
+  router.match('/derpderp')
+})
 
-  it('should provide param object on dynamic routes', function (done) {
-    var router = wayfarer();
-    router
-    .path('/:user', function(uri, param) {
-      param.should.have.property('user', 'tobi');
-      done();
-    });
+test('.match() should not match queryStrings', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  router.on('/hi', function() { t.ok(false, 'incorrect path called') })
+  router.on('/howdy', function() { t.ok(false, 'incorrect path called') })
+  router.on('/404', function() { t.ok(true, 'correct path called') })
+  router.match('/404?derp=darp')
+})
 
-    router.match('/tobi');
-  });
+test('.match() should provide the uri string to callback', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  const sub = wayfarer()
+  router.on('/home', sub.match.bind(sub))
+  sub.on('/home', function(uri) { t.equal(uri, '/home') })
+  router.match('/home')
+})
 
-  it('should match the default path if no other paths match', function (done) {
-    var router = wayfarer({ default: '/404' });
-    router
-      .on('/hello', function() {})
-      .on('/howdy', function() {})
-      .on('/404', function() {done()})
-
-    router.match('/anotherPath');
-  });
-
-  it('should not match queryStrings', function(done) {
-    var router = wayfarer({ default: '/404' });
-    router
-      .on('/hello', function() {done()})
-      .on('/howdy', function() {})
-      .on('/404', function() {});
-
-    router.match('/hello?hello=false');
-  });
-});
-
-describe('aliases', function() {
-  it('.route == .on', function() {
-    var router = wayfarer()
-    router.route.should.eql(router.on)
-  });
-
-  it('.path == .on', function() {
-    var router = wayfarer()
-    router.path.should.eql(router.on)
-  });
-});
+test('aliases', function(t) {
+  t.plan(2)
+  const router = wayfarer()
+  t.equal(router.route, router.on, '.route() == .on()')
+  t.equal(router.path, router.on, '.path() == .on()')
+})
