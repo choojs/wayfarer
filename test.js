@@ -64,6 +64,15 @@ test('.match() should not match queryStrings', function(t) {
   router.match('/404?derp=darp')
 })
 
+test('.match() should provide the uri string to callback', function(t) {
+  t.plan(1)
+  const router = wayfarer()
+  const sub = wayfarer()
+  router.on('/home', sub.match.bind(sub))
+  sub.on('/home', function(uri) { t.equal(uri, '/home') })
+  router.match('/home')
+})
+
 test('aliases', function(t) {
   t.plan(2)
   const router = wayfarer()
