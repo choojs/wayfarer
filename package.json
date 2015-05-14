@@ -4,7 +4,7 @@
   "description": "A simple router built for minimalism and speed",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test tape test.js | tap-bail | tap-spec",
+    "test": "standard && NODE_ENV=test node test",
     "test-cov": "NODE_ENV=test istanbul cover test.js"
   },
   "repository": {
@@ -14,8 +14,17 @@
   "keywords": [
     "router",
     "trie",
-    "minimalism",
-    "react"
+    "client",
+    "simple",
+    "minimal",
+    "functional",
+    "idempotent",
+    "on",
+    "event",
+    "emitter",
+    "react",
+    "browserify",
+    "browser"
   ],
   "author": "Yoshua Wuyts <i@yoshuawuyts.com>",
   "license": "MIT",
@@ -27,12 +36,8 @@
     "routington": "^1.0.2"
   },
   "devDependencies": {
-    "coveralls": "^2.10.0",
     "istanbul": "^0.2.11",
     "mocha": "^1.20.1",
-    "should": "^4.0.4",
-    "tap-bail": "0.0.0",
-    "tap-spec": "^2.1.2",
     "tape": "^3.0.3"
   }
 }

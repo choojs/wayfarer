@@ -1,49 +1,34 @@
+const routington = require('routington')
+const assert = require('assert')
 
-var router = require('routington')
-var assert = require('assert')
+module.exports = wayfarer
 
-var wayfarer = Wayfarer.prototype
+// create a router
+// str -> obj
+function wayfarer (dft) {
+  dft = dft || ''
+  const router = routington()
 
-module.exports = Wayfarer
+  emit.emit = emit
+  emit.on = on
 
-// Create a new router.
-// @param  {Object} opts
-//   @prop {String} default
-// @return {Object}
-function Wayfarer(opts) {
-  if (!(this instanceof Wayfarer)) return new Wayfarer(opts)
-  opts = opts || {}
-  this.router = router()
-  this.defaultPath = opts.default || ''
+  return emit
+
+  // define a path
+  // str, fn -> obj
+  function on (path, cb) {
+    assert.equal(typeof path, 'string')
+    assert.equal(typeof cb, 'function')
+    const node = router.define(path)[0]
+    node.cb = cb
+    return emit
+  }
+
+  // match a route
+  // str -> null
+  function emit (path) {
+    path = path || ''
+    const match = router.match(path) || router.match(dft)
+    match.node.cb(path, match ? match.param : {})
+  }
 }
-
-// Define a new path.
-// @param {String} path
-// @param {Function} cb
-// @return {Wayfarer}
-wayfarer.on = function(path, cb) {
-  assert('string' == typeof path, 'Path should be a string')
-  assert('function' == typeof cb, 'Callback should be a function')
-  var node = this.router.define(path)[0]
-  node.cb = cb
-
-  return this
-}
-
-// Math a route against the paths.
-// @param {String} path
-// @return {Any}
-// @api public
-wayfarer.match = function(path) {
-  assert('string' == typeof path, 'Path should be a string')
-
-  var nw = path.split('?')[0]
-  var match = this.router.match(nw)
-  if (!match) match = this.router.match(this.defaultPath)
-
-  return match.node.cb(path, match ? match.param : {})
-}
-
-// Aliases.
-wayfarer.path = wayfarer.on
-wayfarer.route = wayfarer.on
