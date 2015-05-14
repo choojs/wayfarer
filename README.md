@@ -4,8 +4,7 @@
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
 
-Modular [trie based](https://github.com/jonathanong/routington/) based router. Works best with
-[Browserify](github.com/substack/browserify).
+Composable [trie based](https://github.com/jonathanong/routington/) router.
 
 ## Installation
 ```bash
@@ -16,63 +15,56 @@ $ npm install wayfarer
 ```js
 const wayfarer = require('wayfarer')
 
-const router = wayfarer({ default: '/404' })
+const router = wayfarer('/404')
 
 router.on('/', () => console.log('/'))
-router.on('/404', () => console.log('/404'))
-router.on('/:user', () => console.log('/user'))
+router.on('/404', uri => console.log('404 %s not found', uri))
+router.on('/:user', (uri, param) => console.log('user is %s', param))
 
-router.match('/tobi')
-// => '/user'
+router('/tobi')
+// => 'user is tobi'
+
+router('/uhoh')
+// => '404 uhoh not found'
+```
+
+## Subrouting
+Routers can be infinitely nested, allowing routing to be scoped per view.
+```js
+const wayfarer = require('wayfarer')
+
+const r1 = wayfarer()
+const r2 = wayfarer()
+
+r1.on('/', r2)
+r2.on('/', () => console.log('subrouter trix!'))
+
+r1('/')
+// => 'subrouter trix!'
 ```
 
 ## API
-#### wayfarer(opts)
-Initialize wayfarer with options. `default` allows setting a default path
-to match if none other match. Ignores query strings.
-```js
-const router = wayfarer({ default: '/404' })
-```
+### router = wayfarer(default)
+Initialize a router with a default route. Doesn't ignore querystrings and hashes.
 
-#### .on(path, cb)
-Register a new path. Wayfarer uses a trie to match routes, so the order in
-which routes are registered does not matter.
-```js
-router.on('/', () => console.log('do stuff'))
-router.on('/:user', () => console.log('do user stuff'))
-```
+### router.on(route, cb)
+Register a new route. The order in which routes are registered does not matter.
+See [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
+for all route options.
 
-Partial paths are supported through the `/:` operator, and the callback
-provides a param object. With a route like `/:user` if you navigated to
-`/somename`, you'd get a param object like this: `{ user: 'somename' }`.
-```js
-router.on('/:user', (uri, param) => console.log('my name is ', param.user))
-```
+### router(route)
+Match a route and execute the corresponding callback. Alias: `router.emit()`.
 
-Nested routers are supported by passing in `.match()` as the callback to
-another router.
-```js
-const main = wayfarer()
-const sub  = wayfarer()
-
-main.on('/foo', sub.match.bind(sub))
-sub.on('/foo/bar'), (uri) => console.log(uri))
-
-main.match('/foo/bar')
-// '/foo/bar'
-```
-
-#### .match(path)
-Match a path against the saved paths in the router. If a match is
-found the registered callback will be executed.
-```js
-router.match('/tobi')
-// => 'do user stuff'
-```
+## Why?
+Routers like [react-router](https://github.com/rackt/react-router) are
+complicated solutions for a simple problem. All I want is a
+[methodless](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) router
+that's as simple as `EventEmitter` and allows composition by mounting
+subrouters as handlers.
 
 ## See Also
 - [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
-- [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip a url to only match the pathname
+- [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip querystrings and hashes from a url
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
