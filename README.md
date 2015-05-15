@@ -25,8 +25,8 @@ router.on('/:user', (uri, param) => console.log('user is %s', param.user))
 router('/tobi')
 // => 'user is tobi'
 
-router('/uhoh')
-// => '404 uhoh not found'
+router('/uh/oh')
+// => '404 /uh/oh not found'
 ```
 
 ## Subrouting
