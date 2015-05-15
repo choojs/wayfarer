@@ -3,6 +3,7 @@
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
+[![js-standard-style][standard-image]][standard-url]
 
 Composable [trie based](https://github.com/jonathanong/routington/) router.
 
@@ -77,3 +78,5 @@ subrouters as handlers.
 [coveralls-url]: https://coveralls.io/r/yoshuawuyts/wayfarer?branch=master
 [downloads-image]: http://img.shields.io/npm/dm/wayfarer.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/wayfarer
+[standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
+[standard-url]: https://github.com/feross/standard
