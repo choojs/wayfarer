@@ -72,7 +72,7 @@ subrouters as handlers.
 
 [npm-image]: https://img.shields.io/npm/v/wayfarer.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wayfarer
-[travis-image]: https://img.shields.io/travis/yoshuawuyts/wayfarer.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/yoshuawuyts/wayfarer/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/yoshuawuyts/wayfarer
 [coveralls-image]: https://img.shields.io/coveralls/yoshuawuyts/wayfarer.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/yoshuawuyts/wayfarer?branch=master
