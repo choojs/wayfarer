@@ -56,6 +56,9 @@ for all route options.
 ### router(route)
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
 
+### router.match(route)
+Match and return a route without executing the corresponding callback.
+
 ## Why?
 Routers like [react-router](https://github.com/rackt/react-router) are
 complicated solutions for a simple problem. All I want is a

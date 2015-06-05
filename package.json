@@ -30,6 +30,7 @@
   "devDependencies": {
     "istanbul": "^0.2.11",
     "mocha": "^1.20.1",
+    "standard": "^4.0.1",
     "tape": "^3.0.3"
   },
   "files": [
