@@ -1,5 +1,5 @@
-const routington = require('routington')
-const assert = require('assert')
+var routington = require('routington')
+var assert = require('assert')
 
 module.exports = wayfarer
 
@@ -7,10 +7,11 @@ module.exports = wayfarer
 // str -> obj
 function wayfarer (dft) {
   dft = dft || ''
-  const router = routington()
+  var router = routington()
 
   emit.emit = emit
   emit.on = on
+  emit.match = match
 
   return emit
 
@@ -19,16 +20,22 @@ function wayfarer (dft) {
   function on (path, cb) {
     assert.equal(typeof path, 'string')
     assert.equal(typeof cb, 'function')
-    const node = router.define(path)[0]
+    var node = router.define(path)[0]
     node.cb = cb
     return emit
   }
 
-  // match a route
+  // match and call a route
   // str -> null
   function emit (path) {
     path = path || ''
-    const match = router.match(path) || router.match(dft)
-    match.node.cb(path, match ? match.param : {})
+    var matched = match(path)
+    if (matched) matched.node.cb(path, matched.param)
+  }
+
+  // match and return route
+  // str -> obj
+  function match (path) {
+    return router.match(path) || router.match(dft)
   }
 }
