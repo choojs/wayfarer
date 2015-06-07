@@ -54,12 +54,13 @@ test('aliases', function (t) {
 })
 
 test('.match()', function (t) {
-  t.plan(2)
+  t.plan(3)
   const r = wayfarer()
-  r.on('/user/:id', function () {
-    t.fail('route should not be called with .match()')
+  r.on('/user/:id', function (uri) {
+    t.equal(uri, '/user/once', 'route not called with .match()')
   })
-  const matched = r.match('/user/123')
-  t.equal(matched.param.id, '123')
+  const matched = r.match('/user/matched')
+  t.equal(matched.param.id, 'matched')
   t.equal(typeof matched.node.cb, 'function')
+  r('/user/once')
 })
