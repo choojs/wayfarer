@@ -80,18 +80,3 @@ test('aliases', function (t) {
   const r = wayfarer()
   t.equal(r, r.emit)
 })
-
-test('.match()', function (t) {
-  t.plan(3)
-  const r = wayfarer()
-
-  r.on('/user/:id', function (uri) {
-    t.equal(uri, '/user/once', 'route not called with .match()')
-  })
-
-  r('/user/once')
-
-  const matched = r.match('/user/matched')
-  t.equal(matched.param.id, 'matched')
-  t.equal(typeof matched.node.cb, 'function')
-})

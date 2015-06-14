@@ -14,7 +14,6 @@ function wayfarer (dft) {
   const router = routington()
   const mounts = routington()
 
-  emit.match = match
   emit[sym] = true
   emit.emit = emit
   emit.on = on
@@ -48,10 +47,10 @@ function wayfarer (dft) {
       path = nw.join('/')
     }
 
-    const matched = mountPath ? mountPath : match(path)
-    assert.ok(matched, 'path ' + path + ' did not match')
-    param = xtend(param, matched.param)
-    matched.node.cb('/' + path, param)
+    const mch = mountPath ? mountPath : router.match(path) || router.match(dft)
+    assert.ok(mch, 'path ' + path + ' did not match')
+    param = xtend(param, mch.param)
+    mch.node.cb('/' + path, param)
   }
 
   // mount a subrouter
@@ -61,13 +60,6 @@ function wayfarer (dft) {
     const node = mounts.define(path)[0]
     node.cb = cb
     return emit
-  }
-
-  // match and return route
-  // str -> obj
-  function match (path) {
-    path = sanitizeUri(path) || ''
-    return router.match(path) || router.match(dft)
   }
 
   // match a mounted router
