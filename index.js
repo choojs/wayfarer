@@ -1,41 +1,87 @@
-var routington = require('routington')
-var assert = require('assert')
+const routington = require('routington')
+const symbol = require('es6-symbol')
+const assert = require('assert')
+const xtend = require('xtend')
+
+const sym = symbol('wayfarer')
 
 module.exports = wayfarer
 
 // create a router
 // str -> obj
 function wayfarer (dft) {
-  dft = dft || ''
-  var router = routington()
+  dft = sanitizeUri(dft) || ''
+  const router = routington()
+  const mounts = routington()
 
+  emit.match = match
+  emit[sym] = true
   emit.emit = emit
   emit.on = on
-  emit.match = match
 
   return emit
 
   // define a path
-  // str, fn -> obj
+  // (str, fn) -> obj
   function on (path, cb) {
     assert.equal(typeof path, 'string')
     assert.equal(typeof cb, 'function')
-    var node = router.define(path)[0]
+    path = sanitizeUri(path) || ''
+
+    if (cb[sym]) return mount(path, cb)
+
+    const node = router.define(path)[0]
     node.cb = cb
     return emit
   }
 
   // match and call a route
   // str -> null
-  function emit (path) {
-    path = path || ''
-    var matched = match(path)
-    if (matched) matched.node.cb(path, matched.param)
+  function emit (path, param) {
+    path = sanitizeUri(path) || ''
+    param = param || {}
+
+    const mountPath = mountMatch(path)
+    if (mountPath) {
+      const nw = path.split('/')
+      nw.shift()
+      path = nw.join('/')
+    }
+
+    const matched = mountPath ? mountPath : match(path)
+    assert.ok(matched, 'path ' + path + ' did not match')
+    param = xtend(param, matched.param)
+    matched.node.cb('/' + path, param)
+  }
+
+  // mount a subrouter
+  // str -> null
+  function mount (path, cb) {
+    path = path.split('/')[0]
+    const node = mounts.define(path)[0]
+    node.cb = cb
+    return emit
   }
 
   // match and return route
   // str -> obj
   function match (path) {
+    path = sanitizeUri(path) || ''
     return router.match(path) || router.match(dft)
   }
+
+  // match a mounted router
+  // str -> str|bool
+  function mountMatch (path) {
+    const nw = path.split('/')[0]
+    const matched = mounts.match(nw)
+    return matched
+  }
+}
+
+// strip leading `/`
+// str -> str
+function sanitizeUri (str) {
+  str = str || ''
+  return str.replace(/^\//, '')
 }

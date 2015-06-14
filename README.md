@@ -6,6 +6,8 @@
 [![js-standard-style][standard-image]][standard-url]
 
 Composable [trie based](https://github.com/jonathanong/routington/) router.
+It is faster than traditional, linear, regular expression-matching routers,
+although insignficantly, and scales with the number of routes.
 
 ## Installation
 ```bash
@@ -32,15 +34,13 @@ router('/uh/oh')
 ## Subrouting
 Routers can be infinitely nested, allowing routing to be scoped per view.
 ```js
-const wayfarer = require('wayfarer')
-
 const r1 = wayfarer()
 const r2 = wayfarer()
 
-r1.on('/', r2)
-r2.on('/', () => console.log('subrouter trix!'))
+r1.on('/:parent', r2)
+r2.on('/child', () => console.log('subrouter trix!'))
 
-r1('/')
+r1('/dada/child')
 // => 'subrouter trix!'
 ```
 

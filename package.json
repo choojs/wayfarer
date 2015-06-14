@@ -25,7 +25,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "routington": "^1.0.2"
+    "es6-symbol": "^2.0.1",
+    "routington": "^1.0.2",
+    "xtend": "^4.0.0"
   },
   "devDependencies": {
     "istanbul": "^0.2.11",
