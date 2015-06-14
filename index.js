@@ -26,10 +26,7 @@ function wayfarer (dft) {
     assert.equal(typeof path, 'string')
     assert.equal(typeof cb, 'function')
     path = sanitizeUri(path) || ''
-
-    if (cb[sym]) return mount(path, cb)
-
-    const node = router.define(path)[0]
+    const node = cb[sym] ? mounts.define(path)[0] : router.define(path)[0]
     node.cb = cb
     return emit
   }
@@ -40,35 +37,44 @@ function wayfarer (dft) {
     path = sanitizeUri(path) || ''
     params = params || {}
 
-    const mountPath = mountMatch(path)
-    if (mountPath) {
-      const nw = path.split('/')
-      nw.shift()
-      path = nw.join('/')
-    }
+    const sub = matchSub(path)
+    if (sub) path = sub.path
 
-    const mch = mountPath ? mountPath : router.match(path) || router.match(dft)
-    assert.ok(mch, 'path ' + path + ' did not match')
-    params = xtend(params, mch.param)
+    const match = sub ? sub.match : router.match(path) || router.match(dft)
+    assert.ok(match, 'path ' + path + ' did not match')
+    params = xtend(params, match.param)
+
     // only nested routers need a path
-    mountPath ? mch.node.cb(path, params) : mch.node.cb(params)
-  }
-
-  // mount a subrouter
-  // str -> null
-  function mount (path, cb) {
-    path = path.split('/')[0]
-    const node = mounts.define(path)[0]
-    node.cb = cb
-    return emit
+    sub ? match.node.cb(path, params) : match.node.cb(params)
   }
 
   // match a mounted router
-  // str -> str|bool
-  function mountMatch (path) {
-    const nw = path.split('/')[0]
-    const matched = mounts.match(nw)
-    return matched
+  // str -> obj|null
+  function matchSub (path) {
+    var match = null
+    var count = 0
+    const split = path.split('/')
+
+    var n = 0
+    while (n < split.length) {
+      var ln = split.length - n
+      var cnt = -1
+      var nw = ''
+      while (++cnt < ln) nw = nw ? nw.concat('/', split[cnt]) : split[cnt]
+
+      var imatch = mounts.match(nw)
+      if (imatch) {
+        match = imatch
+        count += n
+        break
+      }
+      n++
+    }
+
+    if (!match) return
+    while (count--) split.shift()
+    path = split.join('/')
+    return { match: match, path: path }
   }
 }
 

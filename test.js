@@ -42,13 +42,13 @@ test('.emit() should throw if no matches are found', function (t) {
 })
 
 test('.emit() should allow nesting', function (t) {
-  t.plan(4)
+  t.plan(7)
 
   const r1 = wayfarer()
   const r2 = wayfarer()
   r1.on('/home', r2)
   r2.on('/', function () {
-    t.pass('/')
+    t.pass('/home')
   })
 
   r1('/home')
@@ -71,6 +71,19 @@ test('.emit() should allow nesting', function (t) {
   })
 
   r5('/hello/child')
+
+  const r7 = wayfarer()
+  const r8 = wayfarer()
+  const r9 = wayfarer()
+  r7.on('/foo/:parent', r8)
+  r8.on('/:child', r9)
+  r9.on('/:grandchild', function (param) {
+    t.equal(param.parent, 'bin')
+    t.equal(param.child, 'bar')
+    t.equal(param.grandchild, 'baz')
+  })
+
+  r7('/foo/bin/bar/baz')
 })
 
 test('aliases', function (t) {
