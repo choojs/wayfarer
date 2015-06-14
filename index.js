@@ -36,9 +36,9 @@ function wayfarer (dft) {
 
   // match and call a route
   // str -> null
-  function emit (path, param) {
+  function emit (path, params) {
     path = sanitizeUri(path) || ''
-    param = param || {}
+    params = params || {}
 
     const mountPath = mountMatch(path)
     if (mountPath) {
@@ -49,8 +49,9 @@ function wayfarer (dft) {
 
     const mch = mountPath ? mountPath : router.match(path) || router.match(dft)
     assert.ok(mch, 'path ' + path + ' did not match')
-    param = xtend(param, mch.param)
-    mch.node.cb('/' + path, param)
+    params = xtend(params, mch.param)
+    // only nested routers need a path
+    mountPath ? mch.node.cb(path, params) : mch.node.cb(params)
   }
 
   // mount a subrouter
