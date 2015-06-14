@@ -21,14 +21,14 @@ const wayfarer = require('wayfarer')
 const router = wayfarer('/404')
 
 router.on('/', () => console.log('/'))
-router.on('/404', uri => console.log('404 %s not found', uri))
-router.on('/:user', (uri, param) => console.log('user is %s', param.user))
+router.on('/404', () => console.log('404 not found'))
+router.on('/:user', params => console.log('user is %s', params.user))
 
 router('/tobi')
 // => 'user is tobi'
 
 router('/uh/oh')
-// => '404 /uh/oh not found'
+// => '404 not found'
 ```
 
 ## Subrouting
@@ -48,7 +48,7 @@ r1('/dada/child')
 ### router = wayfarer(default)
 Initialize a router with a default route. Doesn't ignore querystrings and hashes.
 
-### router.on(route, cb)
+### router.on(route, cb(params))
 Register a new route. The order in which routes are registered does not matter.
 See [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
 for all route options.

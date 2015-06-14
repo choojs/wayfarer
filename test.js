@@ -27,10 +27,9 @@ test('.on() should catch type errors', function (t) {
 })
 
 test('.emit() should match partials', function (t) {
-  t.plan(2)
+  t.plan(1)
   const r = wayfarer()
-  r.on('/:user', function (uri, param) {
-    t.equal(uri, '/tobi')
+  r.on('/:user', function (param) {
     t.equal(param.user, 'tobi')
   })
   r('/tobi')
@@ -43,13 +42,13 @@ test('.emit() should throw if no matches are found', function (t) {
 })
 
 test('.emit() should allow nesting', function (t) {
-  t.plan(5)
+  t.plan(4)
 
   const r1 = wayfarer()
   const r2 = wayfarer()
   r1.on('/home', r2)
-  r2.on('/', function (uri) {
-    t.equal(uri, '/')
+  r2.on('/', function () {
+    t.pass('/')
   })
 
   r1('/home')
@@ -57,8 +56,8 @@ test('.emit() should allow nesting', function (t) {
   const r3 = wayfarer()
   const r4 = wayfarer()
   r3.on('/parent', r4)
-  r4.on('/child', function (uri) {
-    t.equal(uri, '/child')
+  r4.on('/child', function () {
+    t.pass('/child')
   })
 
   r3('/parent/child')
@@ -66,10 +65,9 @@ test('.emit() should allow nesting', function (t) {
   const r5 = wayfarer()
   const r6 = wayfarer()
   r5.on('/:parent', r6)
-  r6.on('/child', function (uri, param) {
+  r6.on('/child', function (param) {
     t.equal(typeof param, 'object')
     t.equal(param.parent, 'hello')
-    t.equal(uri, '/child')
   })
 
   r5('/hello/child')
