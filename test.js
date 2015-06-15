@@ -41,6 +41,20 @@ test('.emit() should throw if no matches are found', function (t) {
   t.throws(r1.bind(r1, '/woops'), /path/)
 })
 
+test('.emi() should allow multiple handlers', function (t) {
+  t.plan(2)
+
+  const r1 = wayfarer()
+  r1.on('/', function () {
+    t.pass('call 1')
+  })
+  r1.on('/', function () {
+    t.pass('call 2')
+  })
+
+  r1('/')
+})
+
 test('.emit() should allow nesting', function (t) {
   t.plan(7)
 

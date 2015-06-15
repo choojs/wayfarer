@@ -27,7 +27,8 @@ function wayfarer (dft) {
     assert.equal(typeof cb, 'function')
     path = sanitizeUri(path) || ''
     const node = cb[sym] ? mounts.define(path)[0] : router.define(path)[0]
-    node.cb = cb
+    if (Array.isArray(node.cb)) node.cb.push(cb)
+    else node.cb = [cb]
     return emit
   }
 
@@ -45,7 +46,9 @@ function wayfarer (dft) {
     params = xtend(params, match.param)
 
     // only nested routers need a path
-    sub ? match.node.cb(path, params) : match.node.cb(params)
+    match.node.cb.forEach(function (cb) {
+      sub ? cb(path, params) : cb(params)
+    })
   }
 
   // match a mounted router
