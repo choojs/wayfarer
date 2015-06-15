@@ -51,7 +51,8 @@ Initialize a router with a default route. Doesn't ignore querystrings and hashes
 
 ### router.on(route, cb(params))
 Register a new route. The order in which routes are registered does not matter.
-See [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
+Multiple callbacks can be registered. See
+[`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
 for all route options.
 
 ### router(route)
