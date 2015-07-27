@@ -68,6 +68,7 @@ subrouters as handlers.
 ## See Also
 - [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
 - [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip querystrings and hashes from a url
+- [methodist](https://github.com/yoshuawuyts/methodist) - HTTP method matching
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
