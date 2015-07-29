@@ -41,7 +41,7 @@ test('.emit() should throw if no matches are found', function (t) {
   t.throws(r1.bind(r1, '/woops'), /path/)
 })
 
-test('.emi() should allow multiple handlers', function (t) {
+test('.emit() should allow multiple handlers', function (t) {
   t.plan(2)
 
   const r1 = wayfarer()
@@ -98,6 +98,18 @@ test('.emit() should allow nesting', function (t) {
   })
 
   r7('/foo/bin/bar/baz')
+})
+
+test('.default() should trigger the default route', function (t) {
+  t.plan(5)
+  const r = wayfarer('/404')
+  r.on('/404', function (param) {
+    t.pass('called')
+    t.equal(typeof param, 'object')
+    if (param.foo) t.equal(param.foo, 'bar')
+  })
+  r.default()
+  r.default({ foo: 'bar' })
 })
 
 test('aliases', function (t) {

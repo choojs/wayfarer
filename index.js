@@ -15,6 +15,7 @@ function wayfarer (dft) {
   const mounts = routington()
 
   emit[sym] = true
+  emit.default = defaultFn
   emit.emit = emit
   emit.on = on
 
@@ -49,6 +50,12 @@ function wayfarer (dft) {
     match.node.cb.forEach(function (cb) {
       sub ? cb(path, params) : cb(params)
     })
+  }
+
+  // match the default route
+  // obj? -> null
+  function defaultFn (params) {
+    emit(dft, params)
   }
 
   // match a mounted router
