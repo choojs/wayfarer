@@ -55,6 +55,9 @@ Routes can register multiple callbacks. See
 [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
 for all route options.
 
+### router.default(params)
+Trigger the default route. Useful to trigger errors externally.
+
 ### router(route)
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
 
