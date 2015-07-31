@@ -33,7 +33,8 @@ router('/uh/oh')
 
 ## Subrouting
 Routers can be infinitely nested, allowing routing to be scoped per view.
-Matched params are passed into subrouters.
+Matched params are passed into subrouters. Nested routes will call their
+parent's default handler if no path matches.
 ```js
 const r1 = wayfarer()
 const r2 = wayfarer()
