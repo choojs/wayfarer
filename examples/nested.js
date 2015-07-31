@@ -1,8 +1,9 @@
 const wayfarer = require('wayfarer')
 
-const userRouter = wayfarer()
+const userRouter = wayfarer('err')
 const repoRouter = wayfarer()
 
+userRouter.on('/err', () => console.error('path not found'))
 userRouter.on('/user/:user', repoRouter)
 repoRouter.on('/:repo', params => {
   console.log(params.user, params.repo)

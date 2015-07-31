@@ -35,20 +35,21 @@ function wayfarer (dft) {
 
   // match and call a route
   // str -> null
-  function emit (path, params) {
+  function emit (path, params, parentDefault) {
     path = sanitizeUri(path) || ''
     params = params || {}
 
     const sub = matchSub(path)
     if (sub) path = sub.path
 
-    const match = sub ? sub.match : router.match(path) || router.match(dft)
+    const localDft = router.match(dft) || parentDefault
+    const match = sub ? sub.match : router.match(path) || localDft
     assert.ok(match, 'path ' + path + ' did not match')
     params = xtend(params, match.param)
 
     // only nested routers need a path
     match.node.cb.forEach(function (cb) {
-      sub ? cb(path, params) : cb(params)
+      sub ? cb(path, params, localDft) : cb(params)
     })
   }
 
@@ -70,7 +71,10 @@ function wayfarer (dft) {
       var ln = split.length - n
       var cnt = -1
       var nw = ''
-      while (++cnt < ln) nw = nw ? nw.concat('/', split[cnt]) : split[cnt]
+
+      while (++cnt < ln) {
+        nw = nw ? nw.concat('/', split[cnt]) : split[cnt]
+      }
 
       var imatch = mounts.match(nw)
       if (imatch) {
@@ -82,9 +86,17 @@ function wayfarer (dft) {
     }
 
     if (!match) return
-    while (count--) split.shift()
+
+    while (count--) {
+      split.shift()
+    }
+
     path = split.join('/')
-    return { match: match, path: path }
+    const ret = {
+      match: match,
+      path: path
+    }
+    return ret
   }
 }
 

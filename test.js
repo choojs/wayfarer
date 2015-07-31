@@ -112,6 +112,34 @@ test('.default() should trigger the default route', function (t) {
   r.default({ foo: 'bar' })
 })
 
+test('nested routes should call parent default route', function (t) {
+  t.plan(5)
+  var baz = false
+  const r1 = wayfarer('/404')
+  const r2 = wayfarer()
+  const r3 = wayfarer()
+  const r4 = wayfarer()
+
+  r1.on('foo', r2)
+  r1.on('/404', pass)
+  r2.on('/bar', r3)
+  r2.on('/:baz', r4)
+
+  r1('foo')
+  r1('foo/bar')
+
+  baz = true
+  r1('foo/bar/foo')
+
+  function pass (params) {
+    if (baz) {
+      t.equal(typeof params, 'object')
+      t.equal(params.baz, 'foo')
+    }
+    t.pass('called')
+  }
+})
+
 test('aliases', function (t) {
   t.plan(1)
   const r = wayfarer()
