@@ -43,7 +43,7 @@ function wayfarer (dft) {
     if (sub) path = sub.path
 
     const localDft = router.match(dft) || parentDefault
-    const match = sub ? sub.match : router.match(path) || localDft
+    const match = sub ? sub.matched : router.match(path) || localDft
     assert.ok(match, 'path ' + path + ' did not match')
     params = xtend(params, match.param)
 
@@ -63,23 +63,24 @@ function wayfarer (dft) {
   // str -> obj|null
   function matchSub (path) {
     var match = null
-    var count = 0
     const split = path.split('/')
+    var count = split.length
 
     var n = 0
     while (n < split.length) {
+      var arr = []
       var ln = split.length - n
       var cnt = -1
-      var nw = ''
 
       while (++cnt < ln) {
-        nw = nw ? nw.concat('/', split[cnt]) : split[cnt]
+        arr.push(split[cnt])
       }
 
+      var nw = arr.join('/')
       var imatch = mounts.match(nw)
       if (imatch) {
         match = imatch
-        count += n
+        count = arr.length
         break
       }
       n++
@@ -93,7 +94,7 @@ function wayfarer (dft) {
 
     path = split.join('/')
     const ret = {
-      match: match,
+      matched: match,
       path: path
     }
     return ret

@@ -56,7 +56,7 @@ test('.emit() should allow multiple handlers', function (t) {
 })
 
 test('.emit() should allow nesting', function (t) {
-  t.plan(7)
+  t.plan(8)
 
   const r1 = wayfarer()
   const r2 = wayfarer()
@@ -89,15 +89,26 @@ test('.emit() should allow nesting', function (t) {
   const r7 = wayfarer()
   const r8 = wayfarer()
   const r9 = wayfarer()
-  r7.on('/foo/:parent', r8)
-  r8.on('/:child', r9)
-  r9.on('/:grandchild', function (param) {
+  r7.on('/foo', r8)
+  r8.on('/bin', r9)
+  r9.on('/bar', function (param) {
+    t.pass('called')
+  })
+
+  r7('/foo/bin/bar')
+
+  const r10 = wayfarer()
+  const r11 = wayfarer()
+  const r12 = wayfarer()
+  r10.on('/foo/:parent', r11)
+  r11.on('/:child', r12)
+  r12.on('/:grandchild', function (param) {
     t.equal(param.parent, 'bin')
     t.equal(param.child, 'bar')
     t.equal(param.grandchild, 'baz')
   })
 
-  r7('/foo/bin/bar/baz')
+  r10('/foo/bin/bar/baz')
 })
 
 test('.default() should trigger the default route', function (t) {
@@ -113,28 +124,28 @@ test('.default() should trigger the default route', function (t) {
 })
 
 test('nested routes should call parent default route', function (t) {
-  t.plan(5)
+  t.plan(6)
   var baz = false
   const r1 = wayfarer('/404')
   const r2 = wayfarer()
   const r3 = wayfarer()
-  const r4 = wayfarer()
 
   r1.on('foo', r2)
   r1.on('/404', pass)
   r2.on('/bar', r3)
-  r2.on('/:baz', r4)
+  r2.on('/beep/:baz', r3)
 
+  r1('')
   r1('foo')
   r1('foo/bar')
 
   baz = true
-  r1('foo/bar/foo')
+  r1('foo/beep/boop')
 
   function pass (params) {
     if (baz) {
       t.equal(typeof params, 'object')
-      t.equal(params.baz, 'foo')
+      t.equal(params.baz, 'boop')
     }
     t.pass('called')
   }
