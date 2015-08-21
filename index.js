@@ -12,9 +12,12 @@ module.exports = wayfarer
 function wayfarer (dft) {
   dft = sanitizeUri(dft) || ''
   const routes = routington()
-  const mounts = routington()
+  const subrouters = routington()
 
+  emit._subrouters = subrouters
+  emit._routes = routes
   emit[sym] = true
+
   emit.default = defaultFn
   emit.emit = emit
   emit.on = on
@@ -27,7 +30,7 @@ function wayfarer (dft) {
     assert.equal(typeof path, 'string')
     assert.equal(typeof cb, 'function')
     path = sanitizeUri(path) || ''
-    const node = cb[sym] ? mounts.define(path)[0] : routes.define(path)[0]
+    const node = cb[sym] ? subrouters.define(path)[0] : routes.define(path)[0]
     if (Array.isArray(node.cb)) node.cb.push(cb)
     else node.cb = [cb]
     return emit
@@ -77,7 +80,7 @@ function wayfarer (dft) {
       }
 
       var nw = arr.join('/')
-      var imatch = mounts.match(nw)
+      var imatch = subrouters.match(nw)
       if (imatch) {
         match = imatch
         count = arr.length

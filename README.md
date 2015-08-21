@@ -56,18 +56,28 @@ Routes can register multiple callbacks. See
 [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
 for all route options.
 
-### router.default(params)
-Trigger the default route. Useful to trigger errors externally.
-
 ### router(route)
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
 
-## Why?
+## Internals
+__Warning__: these methods are considered internal and should only be used when
+extending wayfarer.
+- `router._default(params)`: Trigger the default route. Useful to propagate
+  error states.
+- `routes = router._routes`: Expose the mounted routes.
+- `subrouters = router._subrouters`: Expose the mounted subrouters.
+
+## FAQ
+### Why did you build this?
 Routers like [react-router](https://github.com/rackt/react-router) are
-complicated solutions for a simple problem. All I want is a
+complicated solutions for a simple problem. In reality all that's needed is a
 [methodless](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) router
-that's as simple as `EventEmitter` and allows composition by mounting
-subrouters as handlers.
+that can define + match paths and can mount other routers to delegate requests.
+
+### Why isn't my route matching?
+Wayfarer only compares strings. Before you pass in an url you probably want to
+strip it of querystrings and hashes using the
+[pathname-match](https://github.com/yoshuawuyts/pathname-match) module.
 
 ## See Also
 - [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
