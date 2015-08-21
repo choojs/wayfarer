@@ -15,10 +15,10 @@ function wayfarer (dft) {
   const subrouters = routington()
 
   emit._subrouters = subrouters
+  emit._default = defaultFn
   emit._routes = routes
   emit[sym] = true
 
-  emit.default = defaultFn
   emit.emit = emit
   emit.on = on
 

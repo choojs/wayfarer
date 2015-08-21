@@ -119,8 +119,8 @@ test('.default() should trigger the default route', function (t) {
     t.equal(typeof param, 'object')
     if (param.foo) t.equal(param.foo, 'bar')
   })
-  r.default()
-  r.default({ foo: 'bar' })
+  r._default()
+  r._default({ foo: 'bar' })
 })
 
 test('nested routes should call parent default route', function (t) {
