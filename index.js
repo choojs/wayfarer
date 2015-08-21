@@ -11,7 +11,7 @@ module.exports = wayfarer
 // str -> obj
 function wayfarer (dft) {
   dft = sanitizeUri(dft) || ''
-  const router = routington()
+  const routes = routington()
   const mounts = routington()
 
   emit[sym] = true
@@ -27,7 +27,7 @@ function wayfarer (dft) {
     assert.equal(typeof path, 'string')
     assert.equal(typeof cb, 'function')
     path = sanitizeUri(path) || ''
-    const node = cb[sym] ? mounts.define(path)[0] : router.define(path)[0]
+    const node = cb[sym] ? mounts.define(path)[0] : routes.define(path)[0]
     if (Array.isArray(node.cb)) node.cb.push(cb)
     else node.cb = [cb]
     return emit
@@ -42,8 +42,8 @@ function wayfarer (dft) {
     const sub = matchSub(path)
     if (sub) path = sub.path
 
-    const localDft = router.match(dft) || parentDefault
-    const match = sub ? sub.matched : router.match(path) || localDft
+    const localDft = routes.match(dft) || parentDefault
+    const match = sub ? sub.matched : routes.match(path) || localDft
     assert.ok(match, 'path ' + path + ' did not match')
     params = xtend(params, match.param)
 
