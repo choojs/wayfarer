@@ -82,7 +82,7 @@ strip it of querystrings and hashes using the
 ## See Also
 - [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
 - [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip querystrings and hashes from a url
-- [methodist](https://github.com/yoshuawuyts/methodist) - HTTP method matching
+- [wayfarer-to-server](https://github.com/yoshuawuyts/wayfarer-to-server) - Wrap wayfarer to provide HTTP method matching and `req, res` delegation
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
