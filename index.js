@@ -18,6 +18,7 @@ function wayfarer (dft) {
   emit._default = defaultFn
   emit._routes = routes
   emit[sym] = true
+  emit._sym = sym
 
   emit.emit = emit
   emit.on = on
