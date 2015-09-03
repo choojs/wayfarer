@@ -1,11 +1,14 @@
 const routington = require('routington')
 const symbol = require('es6-symbol')
+const indexof = require('indexof')
 const assert = require('assert')
 const xtend = require('xtend')
 
 const sym = symbol('wayfarer')
 
 module.exports = wayfarer
+
+var routers = []
 
 // create a router
 // str -> obj
@@ -20,8 +23,11 @@ function wayfarer (dft) {
   emit[sym] = true
   emit._sym = sym
 
+  emit.destroy = destroy
   emit.emit = emit
   emit.on = on
+
+  routers.push(emit)
 
   return emit
 
@@ -61,6 +67,12 @@ function wayfarer (dft) {
   // obj? -> null
   function defaultFn (params) {
     emit(dft, params)
+  }
+
+  // tear down the router
+  function destroy () {
+    var i = indexof(routers, this)
+    if (i > -1) routers.splice(i, 1)
   }
 
   // match a mounted router
@@ -104,6 +116,18 @@ function wayfarer (dft) {
     return ret
   }
 }
+
+// dispatch routes without having
+// to create new router instance
+// str -> null
+wayfarer.go = function go (path, params) {
+  routers.forEach(function (router) {
+    router.emit(path, params)
+  })
+}
+
+// expose `routers`
+wayfarer.routers = routers
 
 // strip leading `/`
 // str -> str

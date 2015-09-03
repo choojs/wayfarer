@@ -1,6 +1,14 @@
 const test = require('tape')
 const wayfarer = require('./')
 
+// helper to reset routers
+function teardown () {
+  var i = wayfarer.routers.length
+  while (i--) {
+    wayfarer.routers[i].destroy()
+  }
+}
+
 test('should match a path', function (t) {
   t.plan(1)
   const r = wayfarer()
@@ -8,6 +16,7 @@ test('should match a path', function (t) {
     t.pass('called')
   })
   r('/')
+  teardown()
 })
 
 test('should match a default path', function (t) {
@@ -17,6 +26,21 @@ test('should match a default path', function (t) {
     t.pass('default')
   })
   r('/nope')
+  teardown()
+})
+
+test('.go() should dispatch to all routers', function (t) {
+  t.plan(2)
+  const r1 = wayfarer()
+  const r2 = wayfarer()
+  r1.on('/', function () {
+    t.pass('call 1')
+  })
+  r2.on('/', function () {
+    t.pass('call 2')
+  })
+  wayfarer.go('/')
+  teardown()
 })
 
 test('.on() should catch type errors', function (t) {
@@ -24,6 +48,7 @@ test('.on() should catch type errors', function (t) {
   const r = wayfarer()
   t.throws(r.on.bind(r, 123), /string/)
   t.throws(r.on.bind(r, '/hi', 123), /function/)
+  teardown()
 })
 
 test('.emit() should match partials', function (t) {
@@ -33,12 +58,14 @@ test('.emit() should match partials', function (t) {
     t.equal(param.user, 'tobi')
   })
   r('/tobi')
+  teardown()
 })
 
 test('.emit() should throw if no matches are found', function (t) {
   t.plan(1)
   const r1 = wayfarer()
   t.throws(r1.bind(r1, '/woops'), /path/)
+  teardown()
 })
 
 test('.emit() should allow multiple handlers', function (t) {
@@ -53,6 +80,7 @@ test('.emit() should allow multiple handlers', function (t) {
   })
 
   r1('/')
+  teardown()
 })
 
 test('.emit() should allow nesting', function (t) {
@@ -60,6 +88,7 @@ test('.emit() should allow nesting', function (t) {
 
   const r1 = wayfarer()
   const r2 = wayfarer()
+
   r1.on('/home', r2)
   r2.on('/', function () {
     t.pass('/home')
@@ -109,6 +138,7 @@ test('.emit() should allow nesting', function (t) {
   })
 
   r10('/foo/bin/bar/baz')
+  teardown()
 })
 
 test('.default() should trigger the default route', function (t) {
@@ -121,6 +151,30 @@ test('.default() should trigger the default route', function (t) {
   })
   r._default()
   r._default({ foo: 'bar' })
+  teardown()
+})
+
+test('.go() should dispatch to all routers', function (t) {
+  t.plan(2)
+  const r1 = wayfarer()
+  const r2 = wayfarer()
+  r1.on('/', function () {
+    t.pass('call 1')
+  })
+  r2.on('/', function () {
+    t.pass('call 2')
+  })
+  wayfarer.go('/')
+  teardown()
+})
+
+test('.destroy() should unbind the router', function (t) {
+  t.plan(2)
+  const r = wayfarer()
+  t.equal(wayfarer.routers.length, 1)
+  r.destroy()
+  t.equal(wayfarer.routers.length, 0)
+  teardown()
 })
 
 test('nested routes should call parent default route', function (t) {
@@ -149,10 +203,12 @@ test('nested routes should call parent default route', function (t) {
     }
     t.pass('called')
   }
+  teardown()
 })
 
 test('aliases', function (t) {
   t.plan(1)
   const r = wayfarer()
   t.equal(r, r.emit)
+  teardown()
 })

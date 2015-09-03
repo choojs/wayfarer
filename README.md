@@ -56,8 +56,14 @@ Routes can register multiple callbacks. See
 [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
 for all route options.
 
+### wayfarer.go(route, [params])
+Trigger `route` on all routes that listen for it
+
 ### router(route)
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
+
+### router.unbind()
+Unbind the router
 
 ## Internals
 __Warning__: these methods are considered internal and should only be used when
