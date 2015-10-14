@@ -1,17 +1,29 @@
-# Change Log
-All notable changes to this project will be documented in this file. This
-project adheres to [Semantic Versioning](http://semver.org/).
+# Change Log All notable changes to this project will be documented in this
+file. This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased](https://github.com/yoshuawuyts/wayfarer/compare/v5.0.1...HEAD)
-### Added
-- __changelog__: add
+### Changed
+- removed multiplexed events
+- removed symbols dependency
+- removed internal method exposure; the need for that was an indication of
+  lower level problems that this patch fixes
 
-## [5.0.1](https://github.com/yoshuawuyts/wayfarer/compare/v5.0.0...v5.0.1) - 2015-08-24
+### Added
+- matched routes can now return values (useful for streams)
+- Trie data structure can now be required doing `require('wayfarer/trie')`
+
+### Fixed
+- moved to using a single trie which greatly decreases lookup times
+- moved lookup logic to separate (internal) data structure which improves perf
+
+## [5.0.1](https://github.com/yoshuawuyts/wayfarer/compare/v5.0.0...v5.0.1) -
+2015-08-24
 ### Fixed
 - [[`3e0317d`](https://github.com/yoshuawuyts/wayfarer/commit/3e0317d)]
   __nesting__: add fallback for 0.12
 
-## [5.0.0](https://github.com/yoshuawuyts/wayfarer/compare/v4.3.1...v5.0.0) - 2015-08-23
+## [5.0.0](https://github.com/yoshuawuyts/wayfarer/compare/v4.3.1...v5.0.0) -
+2015-08-23
 ### Added
 - [[`d3ff446`](https://github.com/yoshuawuyts/wayfarer/commit/d3ff446)]
   __docs:__ document internals
