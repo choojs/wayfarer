@@ -1,3 +1,4 @@
+const noop = require('noop2')
 const test = require('tape')
 const wayfarer = require('./')
 
@@ -8,6 +9,15 @@ test('should match a path', function (t) {
     t.pass('called')
   })
   r('/')
+})
+
+test('should match a nested path', function (t) {
+  t.plan(1)
+  const r = wayfarer()
+  r.on('/foo/bar', function () {
+    t.pass('called')
+  })
+  r('/foo/bar')
 })
 
 test('should match a default path', function (t) {
@@ -22,131 +32,115 @@ test('should match a default path', function (t) {
 test('.on() should catch type errors', function (t) {
   t.plan(2)
   const r = wayfarer()
-  t.throws(r.on.bind(r, 123), /string/)
-  t.throws(r.on.bind(r, '/hi', 123), /function/)
+  t.throws(r.on.bind(r, 123), /string/, 'string')
+  t.throws(r.on.bind(r, '/hi', 123), /function/, 'function')
 })
 
 test('.emit() should match partials', function (t) {
   t.plan(1)
   const r = wayfarer()
   r.on('/:user', function (param) {
-    t.equal(param.user, 'tobi')
+    t.equal(param.user, 'tobi', 'param matched')
   })
   r('/tobi')
+})
+
+test('.emit() should match paths before partials', function (t) {
+  t.plan(1)
+  const r = wayfarer()
+  r.on('/foo', function () {
+    t.pass('called')
+  })
+  r.on('/:user', noop)
+  r('/foo')
+})
+
+test('.emit() should match nested partials', function (t) {
+  t.plan(2)
+  const r = wayfarer()
+  r.on('/:user/:name', function (param) {
+    t.equal(param.user, 'tobi', 'param matched')
+    t.equal(param.name, 'baz', 'param matched')
+  })
+  r('/tobi/baz')
 })
 
 test('.emit() should throw if no matches are found', function (t) {
   t.plan(1)
   const r1 = wayfarer()
-  t.throws(r1.bind(r1, '/woops'), /path/)
+  t.throws(r1.bind(r1, '/woops'), /route/, 'no matches found')
 })
 
-test('.emit() should allow multiple handlers', function (t) {
-  t.plan(2)
-
+test('.emit() should return values', function (t) {
+  t.plan(1)
   const r1 = wayfarer()
-  r1.on('/', function () {
-    t.pass('call 1')
+  r1.on('/foo', function () {
+    return 'hello'
   })
-  r1.on('/', function () {
-    t.pass('call 2')
-  })
-
-  r1('/')
+  t.equal(r1('foo'), 'hello', 'returns value')
 })
 
-test('.emit() should allow nesting', function (t) {
-  t.plan(8)
+test('.emit() mount subrouters', function (t) {
+  t.plan(5)
+
+  const r4 = wayfarer()
+  const r3 = wayfarer()
+  r4.on('/kidlette', function () { t.pass('nested 2 levels') })
+  r3.on('/mom', r4)
+  r3('/mom/kidlette')
 
   const r1 = wayfarer()
   const r2 = wayfarer()
+  r2.on('/', function () { t.pass('nested 1 level') })
   r1.on('/home', r2)
-  r2.on('/', function () {
-    t.pass('/home')
-  })
-
   r1('/home')
-
-  const r3 = wayfarer()
-  const r4 = wayfarer()
-  r3.on('/parent', r4)
-  r4.on('/child', function () {
-    t.pass('/child')
-  })
-
-  r3('/parent/child')
 
   const r5 = wayfarer()
   const r6 = wayfarer()
-  r5.on('/:parent', r6)
   r6.on('/child', function (param) {
-    t.equal(typeof param, 'object')
-    t.equal(param.parent, 'hello')
+    t.equal(typeof param, 'object', 'param is passed')
+    t.equal(param.parent, 'hello', 'nested 2 levels with params')
   })
-
+  r5.on('/:parent', r6)
   r5('/hello/child')
 
   const r7 = wayfarer()
   const r8 = wayfarer()
   const r9 = wayfarer()
-  r7.on('/foo', r8)
+  r9.on('/bar', function (param) { t.pass('called', 'nested 3 levels') })
   r8.on('/bin', r9)
-  r9.on('/bar', function (param) {
-    t.pass('called')
-  })
-
+  r7.on('/foo', r8)
   r7('/foo/bin/bar')
 
-  const r10 = wayfarer()
-  const r11 = wayfarer()
-  const r12 = wayfarer()
-  r10.on('/foo/:parent', r11)
-  r11.on('/:child', r12)
-  r12.on('/:grandchild', function (param) {
-    t.equal(param.parent, 'bin')
-    t.equal(param.child, 'bar')
-    t.equal(param.grandchild, 'baz')
-  })
-
-  r10('/foo/bin/bar/baz')
-})
-
-test('.default() should trigger the default route', function (t) {
-  t.plan(5)
-  const r = wayfarer('/404')
-  r.on('/404', function (param) {
-    t.pass('called')
-    t.equal(typeof param, 'object')
-    if (param.foo) t.equal(param.foo, 'bar')
-  })
-  r._default()
-  r._default({ foo: 'bar' })
+  // const r10 = wayfarer()
+  // const r11 = wayfarer()
+  // const r12 = wayfarer()
+  // r12.on('/:grandchild', function (param) {
+  //   t.equal(param.parent, 'bin', 'nested 3 levels with params')
+  //   t.equal(param.child, 'bar', 'nested 3 levels with params')
+  //   t.equal(param.grandchild, 'baz', 'nested 3 levels with parmas')
+  // })
+  // r11.on('/:child', r12)
+  // r10.on('/foo/:parent', r11)
+  // r10('/foo/bin/bar/baz')
 })
 
 test('nested routes should call parent default route', function (t) {
-  t.plan(6)
-  var baz = false
+  t.plan(4)
   const r1 = wayfarer('/404')
   const r2 = wayfarer()
   const r3 = wayfarer()
 
+  r2.on('/bar', r3)
   r1.on('foo', r2)
   r1.on('/404', pass)
-  r2.on('/bar', r3)
-  r2.on('/beep/:baz', r3)
 
   r1('')
   r1('foo')
   r1('foo/bar')
-
-  baz = true
   r1('foo/beep/boop')
 
   function pass (params) {
-    if (baz) {
-      t.equal(typeof params, 'object')
-      t.equal(params.baz, 'boop')
-    }
     t.pass('called')
   }
 })

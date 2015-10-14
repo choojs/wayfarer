@@ -1,16 +1,19 @@
-# wayfarer
-[![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![Downloads][downloads-image]][downloads-url]
-[![js-standard-style][standard-image]][standard-url]
+# wayfarer [![stability][0]][1]
+[![npm version][2]][3] [![build status][4]][5] [![test coverage][6]][7]
+[![downloads][8]][9] [![js-standard-style][10]][11]
 
 Composable [trie based](https://github.com/jonathanong/routington/) router.
-It is faster than traditional, linear, regular expression-matching routers,
+It's faster than traditional, linear, regular expression-matching routers,
 although insignficantly, and scales with the number of routes.
 
+### features
+- works with any framework
+- built for speed
+- minimal dependencies
+- extensible
+
 ## Installation
-```bash
+```sh
 $ npm install wayfarer
 ```
 
@@ -22,9 +25,9 @@ const router = wayfarer('/404')
 
 router.on('/', () => console.log('/'))
 router.on('/404', () => console.log('404 not found'))
-router.on('/:user', params => console.log('user is %s', params.user))
+router.on('/:user', ctx => console.log('user is %s', ctx.params.user))
 
-router('/tobi')
+router('tobi')
 // => 'user is tobi'
 
 router('/uh/oh')
@@ -39,8 +42,8 @@ parent's default handler if no path matches.
 const r1 = wayfarer()
 const r2 = wayfarer()
 
-r1.on('/:parent', r2)
 r2.on('/child', () => console.log('subrouter trix!'))
+r1.on('/:parent', r2)
 
 r1('/dada/child')
 // => 'subrouter trix!'
@@ -48,24 +51,46 @@ r1('/dada/child')
 
 ## API
 ### router = wayfarer(default)
-Initialize a router with a default route. Doesn't ignore querystrings and hashes.
+Initialize a router with a default route. Doesn't ignore querystrings and
+hashes.
 
-### router.on(route, cb(params))
+### el = router.on(route, cb(ctx, arguments...))
 Register a new route. The order in which routes are registered does not matter.
 Routes can register multiple callbacks. See
 [`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
-for all route options.
+for all route options. When called, the callback is passed a context object and
+any additional arguments from `router()`. The context object has the following
+properties:
+- __route__: the remaining route that wasn't matched
 
-### router(route)
+### router(route|context, arguments...)
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
+Accepts either a `route` string, or a context object with the following
+possible properties:
+- __route__: the route to be matched
+- __params__: an parameters object
+Any arguments passed after the `route/context` are passed as-is into the
+function handler.
+
+## Events
+### router.on('error', cb(err, params, route, arguments...))
+Aside from having a default path, a listener can be attached to handle errors.
+If no listener is attached, an error will be thrown.
 
 ## Internals
-__Warning__: these methods are considered internal and should only be used when
-extending wayfarer.
-- `router._default(params)`: Trigger the default route. Useful to propagate
-  error states.
-- `routes = router._routes`: Expose the mounted routes.
-- `subrouters = router._subrouters`: Expose the mounted subrouters.
+Wayfarer is built on an internal trie structure. If you want to build a router
+using this trie structure it can be accessed through
+`require('wayfarer/trie')`. It exposes the following methods:
+- `trie = Trie()` - create a new trie
+- `node = trie.create(route)` - create a node at a path, and return a node
+- `node = trie.match(route)` - match a route on the the trie and return a node
+- `trie.mount(path, trie)` - mount a trie onto a node at route
+
+## Known issues
+### multiple nested partials don't match
+E.g. `/:foo/:bar/:baz` won't work. This is due `Trie.mount()` overriding child
+partial paths when mounted. I'll get around to fixing this at some point in the
+future, but if anyone wants to contribute a patch it'd most appreciated.
 
 ## FAQ
 ### Why did you build this?
@@ -80,20 +105,27 @@ strip it of querystrings and hashes using the
 [pathname-match](https://github.com/yoshuawuyts/pathname-match) module.
 
 ## See Also
-- [hash-match](https://github.com/sethvincent/hash-match) - easy `window.location.hash` matching
-- [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip querystrings and hashes from a url
-- [wayfarer-to-server](https://github.com/yoshuawuyts/wayfarer-to-server) - Wrap wayfarer to provide HTTP method matching and `req, res` delegation
+- [hash-match](https://github.com/sethvincent/hash-match) - easy
+  `window.location.hash` matching
+- [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip
+  querystrings and hashes from a url
+- [wayfarer-to-server](https://github.com/yoshuawuyts/wayfarer-to-server) -
+  Wrap wayfarer to provide HTTP method matching and `req, res` delegation
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
 
-[npm-image]: https://img.shields.io/npm/v/wayfarer.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/wayfarer
-[travis-image]: https://img.shields.io/travis/yoshuawuyts/wayfarer/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/yoshuawuyts/wayfarer
-[coveralls-image]: https://img.shields.io/coveralls/yoshuawuyts/wayfarer.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/yoshuawuyts/wayfarer?branch=master
-[downloads-image]: http://img.shields.io/npm/dm/wayfarer.svg?style=flat-square
-[downloads-url]: https://npmjs.org/package/wayfarer
-[standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
-[standard-url]: https://github.com/feross/standard
+[0]: https://img.shields.io/badge/stability-2%20stable-brightgreen.svg?style=flat-square
+[1]: https://nodejs.org/api/documentation.html#documentation_stability_index
+[2]: https://img.shields.io/npm/v/wayfarer.svg?style=flat-square
+[3]: https://npmjs.org/package/wayfarer
+[4]: https://img.shields.io/travis/yoshuawuyts/wayfarer/master.svg?style=flat-square
+[5]: https://travis-ci.org/yoshuawuyts/wayfarer
+[6]: https://img.shields.io/codecov/c/github/yoshuawuyts/wayfarer/master.svg?style=flat-square
+[7]: https://codecov.io/github/yoshuawuyts/wayfarer
+[8]: http://img.shields.io/npm/dm/wayfarer.svg?style=flat-square
+[9]: https://npmjs.org/package/wayfarer
+[10]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
+[11]: https://github.com/feross/standard
+[12]: http://github.com/raynos/mercury
+[13]: http://github.com/raynos/virtual-dom
