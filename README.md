@@ -25,7 +25,7 @@ const router = wayfarer('/404')
 
 router.on('/', () => console.log('/'))
 router.on('/404', () => console.log('404 not found'))
-router.on('/:user', ctx => console.log('user is %s', ctx.params.user))
+router.on('/:user', (params) => console.log('user is %s', params.user))
 
 router('tobi')
 // => 'user is tobi'
