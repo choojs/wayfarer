@@ -54,23 +54,14 @@ r1('/dada/child')
 Initialize a router with a default route. Doesn't ignore querystrings and
 hashes.
 
-### el = router.on(route, cb(params))
+### router.on(route, cb(params))
 Register a new route. The order in which routes are registered does not matter.
-Routes can register multiple callbacks. See
-[`routington.define()`](https://github.com/pillarjs/routington#nodes-node--routerdefineroute)
-for all route options. When called, the callback is passed a context object and
-any additional arguments from `router()`. The context object has the following
-properties:
-- __route__: the remaining route that wasn't matched
+Routes can register multiple callbacks. The callback can return values when
+called.
 
-### router(route)
+### val = router(route)
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
-Accepts either a `route` string, or a context object with the following
-possible properties:
-- __route__: the route to be matched
-- __params__: an parameters object
-Any arguments passed after the `route/context` are passed as-is into the
-function handler.
+Returns a values from the matched route (e.g. useful for streams).
 
 ## Internals
 Wayfarer is built on an internal trie structure. If you want to build a router
