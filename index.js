@@ -1,4 +1,5 @@
 const assert = require('assert')
+const sliced = require('sliced')
 const trie = require('./trie')
 
 module.exports = Wayfarer
@@ -40,12 +41,19 @@ function Wayfarer (dft) {
   // (str, obj?) -> null
   function emit (route) {
     assert.notEqual(route, undefined, "'route' must be defined")
+    const args = sliced(arguments)
 
     const node = _trie.match(route)
-    if (node && node.cb) return node.cb(node.params)
+    if (node && node.cb) {
+      args[0] = node.params
+      return node.cb.apply(null, args)
+    }
 
     const dft = _trie.match(_default)
-    if (dft && dft.cb) return dft.cb(dft.params)
+    if (dft && dft.cb) {
+      args[0] = dft.params
+      return dft.cb.apply(null, args)
+    }
 
     throw new Error("route '" + route + "' did not match")
   }

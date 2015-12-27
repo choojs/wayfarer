@@ -54,14 +54,15 @@ r1('/dada/child')
 Initialize a router with a default route. Doesn't ignore querystrings and
 hashes.
 
-### router.on(route, cb(params))
+### router.on(route, cb(params, [arg1, ...]))
 Register a new route. The order in which routes are registered does not matter.
 Routes can register multiple callbacks. The callback can return values when
 called.
 
-### val = router(route)
+### val = router(route, [arg1, ...])
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
-Returns a values from the matched route (e.g. useful for streams).
+Returns a values from the matched route (e.g. useful for streams). Any
+additional values will be passed to the matched route.
 
 ## Internals
 Wayfarer is built on an internal trie structure. If you want to build a router
