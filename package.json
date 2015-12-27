@@ -25,6 +25,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "sliced": "^1.0.1",
     "xtend": "^4.0.1"
   },
   "devDependencies": {

@@ -29,6 +29,18 @@ test('should match a default path', function (t) {
   r('/nope')
 })
 
+test('should allow passing of extra values', function (t) {
+  t.plan(2)
+  const foo = {}
+  const bar = {}
+  const r = wayfarer()
+  r.on('/foo', function (params, arg1, arg2) {
+    t.equal(arg1, foo, 'arg1 was passed')
+    t.equal(arg2, bar, 'arg2 was passed')
+  })
+  r('/foo', foo, bar)
+})
+
 test('.on() should catch type errors', function (t) {
   t.plan(2)
   const r = wayfarer()
