@@ -1,16 +1,16 @@
 const assert = require('assert')
-const sliced = require('sliced')
 const trie = require('./trie')
 
 module.exports = Wayfarer
 
 // create a router
 // str -> obj
-function Wayfarer (dft) {
-  if (!(this instanceof Wayfarer)) return new Wayfarer(dft)
+function Wayfarer (defaultPath) {
+  if (!(this instanceof Wayfarer)) return new Wayfarer(defaultPath)
 
-  const _default = (dft || '').replace(/^\//, '')
+  const _default = (defaultPath || '').replace(/^\//, '')
   const _trie = trie()
+  var dft = null
 
   emit._trie = _trie
   emit.emit = emit
@@ -38,23 +38,29 @@ function Wayfarer (dft) {
   }
 
   // match and call a route
-  // (str, obj?) -> null
-  function emit (route) {
+  // (str, any?...) -> null
+  function emit (route, arg1, arg2, arg3, arg4) {
     assert.notEqual(route, undefined, "'route' must be defined")
-    const args = sliced(arguments)
 
-    const node = _trie.match(route)
-    if (node && node.cb) {
-      args[0] = node.params
-      return node.cb.apply(null, args)
+    var node = _trie.match(route)
+    if (!node || !node.cb) {
+      if (dft === null) dft = _trie.match(_default)
+      if (dft) node = dft
+      if (!dft || !dft.cb) {
+        throw new Error("route '" + route + "' did not match")
+      }
     }
 
-    const dft = _trie.match(_default)
-    if (dft && dft.cb) {
-      args[0] = dft.params
-      return dft.cb.apply(null, args)
-    }
+    const cb = node.cb
+    const params = node.params || {}
 
-    throw new Error("route '" + route + "' did not match")
+    switch (arguments.length) {
+      case 1: return cb(params)
+      case 2: return cb(params, arg1)
+      case 3: return cb(params, arg1, arg2)
+      case 4: return cb(params, arg1, arg2, arg3)
+      case 5: return cb(params, arg1, arg2, arg3, arg4)
+      default: cb.apply(null, Array.prototype.slice.call(arguments, 0))
+    }
   }
 }
