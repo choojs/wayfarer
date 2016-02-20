@@ -6,6 +6,11 @@ Composable [trie based](https://github.com/jonathanong/routington/) router.
 It's faster than traditional, linear, regular expression-matching routers,
 although insignficantly, and scales with the number of routes.
 
+If you're looking for a client-side router check out
+[sheet-router](https://github.com/yoshuawuyts/sheet-router). If you're looking
+for a server router check out
+[server-router](https://github.com/yoshuawuyts/server-router).
+
 ### features
 - works with any framework
 - built for speed
@@ -92,6 +97,9 @@ strip it of querystrings and hashes using the
 [pathname-match](https://github.com/yoshuawuyts/pathname-match) module.
 
 ## See Also
+- [sheet-router](https://github.com/yoshuawuyts/sheet-router) - fast, modular
+  client-side router
+- [server-router](https://github.com/yoshuawuyts/server-router) - server router
 - [hash-match](https://github.com/sethvincent/hash-match) - easy
   `window.location.hash` matching
 - [pathname-match](https://github.com/yoshuawuyts/pathname-match) - strip
