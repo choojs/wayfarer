@@ -48,6 +48,19 @@ test('.on() should catch type errors', function (t) {
   t.throws(r.on.bind(r, '/hi', 123), /function/, 'function')
 })
 
+test('.emit() should match paths', function (t) {
+  t.plan(2)
+  const r = wayfarer()
+  r.on('/foo/bar', function (param) {
+    t.pass('bar called')
+  })
+  r.on('/foo/baz', function (param) {
+    t.pass('baz called')
+  })
+  r('/foo/bar')
+  r('/foo/baz')
+})
+
 test('.emit() should match partials', function (t) {
   t.plan(1)
   const r = wayfarer()
