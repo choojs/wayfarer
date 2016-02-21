@@ -34,6 +34,8 @@ Trie.prototype.create = function (route) {
     } else if (!trie.nodes[route]) {
       node = { nodes: {} }
       trie.nodes[route] = node
+    } else {
+      node = trie.nodes[route]
     }
 
     // we must recurse deeper
