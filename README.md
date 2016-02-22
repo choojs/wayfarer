@@ -2,9 +2,9 @@
 [![npm version][2]][3] [![build status][4]][5] [![test coverage][6]][7]
 [![downloads][8]][9] [![js-standard-style][10]][11]
 
-Composable [trie based](https://github.com/jonathanong/routington/) router.
-It's faster than traditional, linear, regular expression-matching routers,
-although insignficantly, and scales with the number of routes.
+Composable [trie based](https://en.wikipedia.org/wiki/Trie) router.  It's
+faster than traditional, linear, regular expression-matching routers, although
+insignficantly, and scales with the number of routes.
 
 If you're looking for a client-side router check out
 [sheet-router](https://github.com/yoshuawuyts/sheet-router). If you're looking
