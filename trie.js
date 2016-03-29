@@ -29,6 +29,8 @@ Trie.prototype.create = function (route) {
       if (!trie.nodes['$$']) {
         node = { nodes: {} }
         trie.nodes['$$'] = node
+      } else {
+        node = trie.nodes['$$']
       }
       trie.name = route.replace(/^:/, '')
     } else if (!trie.nodes[route]) {
