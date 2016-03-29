@@ -26,9 +26,9 @@ Trie.prototype.create = function (route) {
     var node = null
     if (/^:/.test(route)) {
       // if node is a name match, set name and append to ':' node
-      if (!trie.nodes[':']) {
+      if (!trie.nodes['$$']) {
         node = { nodes: {} }
-        trie.nodes[':'] = node
+        trie.nodes['$$'] = node
       }
       trie.name = route.replace(/^:/, '')
     } else if (!trie.nodes[route]) {
@@ -64,7 +64,7 @@ Trie.prototype.match = function (route) {
     } else if (trie.name) {
       // match named routes
       params[trie.name] = route
-      return search(index + 1, trie.nodes[':'])
+      return search(index + 1, trie.nodes['$$'])
     } else {
       // no matches found
       return search(index + 1)
