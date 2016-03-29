@@ -80,19 +80,14 @@ test('.emit() should match paths before partials', function (t) {
   r('/foo')
 })
 
-test('.emit() should match multiple partials', function (t) {
-  t.plan(2)
+test('.emit() should allow path overriding', function (t) {
+  t.plan(1)
   const r = wayfarer()
-  r.on('/', noop)
-  r.on('/foo', function () {
-    t.pass('called')
-  })
-  r.on('/foo/:user', function () {
-    t.pass('called')
-  })
   r.on('/:user', noop)
+  r.on('/:user', function () {
+    t.pass('called')
+  })
   r('/foo')
-  r('/foo/bar')
 })
 
 test('.emit() should match nested partials', function (t) {
