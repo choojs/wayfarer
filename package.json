@@ -4,8 +4,8 @@
   "description": "Composable trie based router",
   "main": "index.js",
   "scripts": {
-    "test": "standard && NODE_ENV=test node test",
-    "test-cov": "NODE_ENV=test istanbul cover test.js"
+    "test": "standard && NODE_ENV=test tape test/*",
+    "test-cov": "NODE_ENV=test istanbul cover test/*"
   },
   "repository": "yoshuawuyts/wayfarer",
   "keywords": [
