@@ -54,6 +54,29 @@ r1('/dada/child')
 // => 'subrouter trix!'
 ```
 
+## Walk
+Sometimes it's necessary to walk the `trie` to apply transformations.
+```js
+const walk = require('wayfarer/walk')
+const wayfarer = require('wayfarer')
+
+const router = wayfarer()
+router.on('/multiply', (x, y) => x * y)
+router.on('/divide', (x, y) => x / y)
+
+walk(router, (route, cb) => {
+  const y = 2
+  return function (params, x) {
+    return cb(x, y)
+  }
+})
+
+router('/multiply', 4)
+// => 8
+router('/divide', 8)
+// => 4
+```
+
 ## API
 ### router = wayfarer(default)
 Initialize a router with a default route. Doesn't ignore querystrings and
