@@ -38,6 +38,7 @@
     "LICENSE",
     "index.js",
     "trie.js",
+    "walk.js",
     "README.md"
   ]
 }
