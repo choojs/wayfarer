@@ -40,7 +40,10 @@ function Wayfarer (dft) {
   // (str, obj?) -> null
   function emit (route) {
     assert.notEqual(route, undefined, "'route' must be defined")
-    const args = Array.prototype.slice.apply(arguments)
+    const args = new Array(arguments.length)
+    for (var i = 1; i < args.length; i++) {
+      args[i] = arguments[i]
+    }
 
     const node = _trie.match(route)
     if (node && node.cb) {
