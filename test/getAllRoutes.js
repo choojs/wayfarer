@@ -9,20 +9,21 @@ tape('getAllRoutes', function (t) {
   })
 
   t.test('should getAllRoutes', (t) => {
-    t.plan(3)
+    t.plan(4)
     const router = wayfarer()
     router.on('/foo', (x, y) => x * y)
     router.on('/bar', (x, y) => x / y)
 
     const routes = getAllRoutes(router)
 
-    t.equal(routes instanceof Array, true)
-    t.equal(routes.length, 2)
-    t.deepEqual(routes, ['/foo', '/bar'])
+    t.equal(routes instanceof Object, true)
+    t.equal(Object.keys(routes).length, 2)
+    t.equal(typeof routes['/foo'], 'function')
+    t.equal(typeof routes['/bar'], 'function')
   })
 
   t.test('should getAllRoutes from a nested tree', (t) => {
-    t.plan(3)
+    t.plan(6)
     const router = wayfarer()
     router.on('/foo', (x, y) => x * y + 2)
     router.on('/foo/baz', (x, y) => x * y)
@@ -31,13 +32,16 @@ tape('getAllRoutes', function (t) {
 
     const routes = getAllRoutes(router)
 
-    t.equal(routes instanceof Array, true)
-    t.equal(routes.length, 4)
-    t.deepEqual(routes, ['/foo', '/foo/baz', '/bar/bin/barb', '/bar/bin/bla'])
+    t.equal(routes instanceof Object, true)
+    t.equal(Object.keys(routes).length, 4)
+    t.equal(typeof routes['/foo'], 'function')
+    t.equal(typeof routes['/foo/baz'], 'function')
+    t.equal(typeof routes['/bar/bin/barb'], 'function')
+    t.equal(typeof routes['/bar/bin/bla'], 'function')
   })
 
   t.test('should getAllRoutes from a routes with params', (t) => {
-    t.plan(3)
+    t.plan(5)
     const router = wayfarer()
     router.on('/foo', (x, y) => x / y)
     router.on('/foo/:slug', (x, y) => x * y + 2)
@@ -45,8 +49,10 @@ tape('getAllRoutes', function (t) {
 
     const routes = getAllRoutes(router)
 
-    t.equal(routes instanceof Array, true)
-    t.equal(routes.length, 3)
-    t.deepEqual(routes, ['/foo', '/foo/:slug', '/foo/:slug/:id'])
+    t.equal(routes instanceof Object, true)
+    t.equal(Object.keys(routes).length, 3)
+    t.equal(typeof routes['/foo'], 'function')
+    t.equal(typeof routes['/foo/:slug'], 'function')
+    t.equal(typeof routes['/foo/:slug/:id'], 'function')
   })
 })

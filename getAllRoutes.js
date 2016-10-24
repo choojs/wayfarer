@@ -3,15 +3,16 @@ const assert = require('assert')
 module.exports = getAllRoutes
 
 const transform = function (trie, prev = '/') {
-  const routes = []
+  const routes = {}
   const nodes = trie.nodes
-  Object.keys(nodes).forEach(key => {
-    const route = `${prev === '/' ? prev : prev + '/'}${key === '$$' ? ':' + trie.name : key}`
-    if (nodes[key].cb !== undefined) {
-      routes.push(route)
+  Object.keys(nodes).forEach(function (key) {
+    const path = `${prev === '/' ? prev : prev + '/'}${key === '$$' ? ':' + trie.name : key}`
+    const cb = nodes[key].cb
+    if (cb !== undefined) {
+      routes[path] = cb
     }
     if (Object.keys(nodes[key].nodes).length !== 0) {
-      routes.push(...transform(nodes[key], route))
+      Object.assign(routes, transform(nodes[key], path))
     }
   })
   return routes
