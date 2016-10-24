@@ -13,7 +13,10 @@ const transform = function (trie, previous) {
       routes[path] = cb
     }
     if (Object.keys(nodes[key].nodes).length !== 0) {
-      Object.assign(routes, transform(nodes[key], path))
+      const obj = transform(nodes[key], path)
+      Object.keys(obj).forEach(function(r) {
+        routes[r] = obj[r]
+      })
     }
   })
   return routes
