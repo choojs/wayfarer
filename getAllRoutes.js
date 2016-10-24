@@ -2,7 +2,8 @@ const assert = require('assert')
 
 module.exports = getAllRoutes
 
-const transform = function (trie, prev = '/') {
+const transform = function (trie, previous) {
+  const prev = previous || '/'
   const routes = {}
   const nodes = trie.nodes
   Object.keys(nodes).forEach(function (key) {
