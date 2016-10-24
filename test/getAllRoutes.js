@@ -3,16 +3,16 @@ const getAllRoutes = require('../getAllRoutes')
 const tape = require('tape')
 
 tape('getAllRoutes', function (t) {
-  t.test('should assert input types', (t) => {
+  t.test('should assert input types', function(t) {
     t.plan(1)
     t.throws(getAllRoutes.bind(null), /function/, 'assert first arg is function')
   })
 
-  t.test('should getAllRoutes', (t) => {
+  t.test('should getAllRoutes', function(t) {
     t.plan(4)
     const router = wayfarer()
-    router.on('/foo', (x, y) => x * y)
-    router.on('/bar', (x, y) => x / y)
+    router.on('/foo', function(x, y) { x * y })
+    router.on('/bar', function(x, y) { x / y })
 
     const routes = getAllRoutes(router)
 
@@ -22,13 +22,13 @@ tape('getAllRoutes', function (t) {
     t.equal(typeof routes['/bar'], 'function')
   })
 
-  t.test('should getAllRoutes from a nested tree', (t) => {
+  t.test('should getAllRoutes from a nested tree', function(t) {
     t.plan(6)
     const router = wayfarer()
-    router.on('/foo', (x, y) => x * y + 2)
-    router.on('/foo/baz', (x, y) => x * y)
-    router.on('/bar/bin/barb', (x, y) => x / y)
-    router.on('/bar/bin/bla', (x, y) => x / y)
+    router.on('/foo', function(x, y) { return x * y + 2 })
+    router.on('/foo/baz', function(x, y) { return x * y })
+    router.on('/bar/bin/barb', function(x, y) { return x / y })
+    router.on('/bar/bin/bla', function(x, y) { return x / y })
 
     const routes = getAllRoutes(router)
 
@@ -40,12 +40,12 @@ tape('getAllRoutes', function (t) {
     t.equal(typeof routes['/bar/bin/bla'], 'function')
   })
 
-  t.test('should getAllRoutes from a routes with params', (t) => {
+  t.test('should getAllRoutes from a routes with params', function(t) {
     t.plan(5)
     const router = wayfarer()
-    router.on('/foo', (x, y) => x / y)
-    router.on('/foo/:slug', (x, y) => x * y + 2)
-    router.on('/foo/:slug/:id', (x, y) => x * y)
+    router.on('/foo', function(x, y) { return x / y })
+    router.on('/foo/:slug', function(x, y) { return x * y + 2 })
+    router.on('/foo/:slug/:id', function(x, y) { return x * y })
 
     const routes = getAllRoutes(router)
 
