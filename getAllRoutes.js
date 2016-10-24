@@ -14,7 +14,7 @@ const transform = function (trie, previous) {
     }
     if (Object.keys(nodes[key].nodes).length !== 0) {
       const obj = transform(nodes[key], path)
-      Object.keys(obj).forEach(function(r) {
+      Object.keys(obj).forEach(function (r) {
         routes[r] = obj[r]
       })
     }
