@@ -7,7 +7,7 @@ const transform = function (trie, previous) {
   const routes = {}
   const nodes = trie.nodes
   Object.keys(nodes).forEach(function (key) {
-    const path = prev === '/' ? prev : prev + '/'} + key === '$$' ? ':' + trie.name : key
+    const path = (prev === '/' ? prev : prev + '/') + (key === '$$' ? ':' + trie.name : key)
     const cb = nodes[key].cb
     if (cb !== undefined) {
       routes[path] = cb
