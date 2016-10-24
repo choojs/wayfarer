@@ -11,8 +11,8 @@ tape('getAllRoutes', function (t) {
   t.test('should getAllRoutes', function(t) {
     t.plan(4)
     const router = wayfarer()
-    router.on('/foo', function(x, y) { x * y })
-    router.on('/bar', function(x, y) { x / y })
+    router.on('/foo', function(x, y) { return x * y })
+    router.on('/bar', function(x, y) { return x / y })
 
     const routes = getAllRoutes(router)
 
