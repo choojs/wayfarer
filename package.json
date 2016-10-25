@@ -28,11 +28,11 @@
     "xtend": "^4.0.1"
   },
   "devDependencies": {
-    "istanbul": "^0.2.11",
-    "mocha": "^1.20.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
     "noop2": "^2.0.0",
-    "standard": "^4.0.1",
-    "tape": "^3.0.3"
+    "standard": "^8.4.0",
+    "tape": "^4.6.2"
   },
   "files": [
     "LICENSE",
