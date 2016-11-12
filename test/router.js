@@ -181,6 +181,27 @@ tape('trie', function (t) {
     }
   })
 
+  t.test('testing wildcards', function (t) {
+    t.plan(4)
+    const r1 = wayfarer('/404')
+    const r2 = wayfarer()
+    const r3 = wayfarer()
+
+    r2.on('/bar', r3)
+    r1.on('beep/*', r2)
+    r1.on('boop/*/beep', r2)
+    r1.on('/404', pass)
+
+    r1('')
+    r1('beep/boop')
+    r1('boop/a/beep')
+    r1('foo/beep/boop')
+
+    function pass (params) {
+      t.pass('called')
+    }
+  })
+
   t.test('aliases', function (t) {
     t.plan(1)
     const r = wayfarer()
