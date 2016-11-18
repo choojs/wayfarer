@@ -1,6 +1,7 @@
 const mutate = require('xtend/mutable')
 const assert = require('assert')
 const xtend = require('xtend')
+const murl = require('murl')
 
 module.exports = Trie
 
@@ -9,6 +10,7 @@ module.exports = Trie
 function Trie () {
   if (!(this instanceof Trie)) return new Trie()
   this.trie = { nodes: {} }
+  this.pattern = undefined
 }
 
 // create a node on the trie at route
@@ -49,12 +51,14 @@ Trie.prototype.create = function (route) {
 // and return the node
 // str -> obj
 Trie.prototype.match = function (route) {
+  var that = this
   assert.equal(typeof route, 'string', 'route should be a string')
 
   const routes = route.replace(/^\//, '').split('/')
   const params = {}
 
   var node = (function search (index, trie) {
+
     // either there's no match, or we're done searching
     if (trie === undefined) return undefined
     const route = routes[index]
@@ -68,8 +72,19 @@ Trie.prototype.match = function (route) {
       params[trie.name] = route
       return search(index + 1, trie.nodes['$$'])
     } else {
+
+      var routeNames = Object.keys(trie.nodes)
+      for (var i = 0; i < routeNames.length; i++) {
+        that.pattern = murl(routeNames[i])
+        if (that.pattern(route)) {
+          return search(index + 1, trie.nodes[routeNames[i]])
+
+        } else if (i === routeNames.length - 1) {
+          return search(index + 1)
+        }
+
+      }
       // no matches found
-      return search(index + 1)
     }
   })(0, this.trie)
 
