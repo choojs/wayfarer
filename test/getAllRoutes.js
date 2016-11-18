@@ -1,5 +1,5 @@
 const wayfarer = require('../')
-const getAllRoutes = require('../getAllRoutes')
+const getAllRoutes = require('../get-all-routes')
 const tape = require('tape')
 
 tape('getAllRoutes', function (t) {
