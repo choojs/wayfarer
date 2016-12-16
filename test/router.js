@@ -101,6 +101,15 @@ tape('trie', function (t) {
     r('/tobi/baz')
   })
 
+  t.test('.emit() should parse encoded params', function (t) {
+    t.plan(1)
+    const r = wayfarer()
+    r.on('/:channel', function (param) {
+      t.equal(param.channel, '#choo', 'param matched')
+    })
+    r('/%23choo')
+  })
+
   t.test('.emit() should throw if no matches are found', function (t) {
     t.plan(1)
     const r1 = wayfarer()

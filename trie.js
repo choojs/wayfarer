@@ -65,7 +65,7 @@ Trie.prototype.match = function (route) {
       return search(index + 1, trie.nodes[route])
     } else if (trie.name) {
       // match named routes
-      params[trie.name] = route
+      params[trie.name] = decodeURIComponent(route)
       return search(index + 1, trie.nodes['$$'])
     } else {
       // no matches found
