@@ -18,7 +18,8 @@ Trie.prototype.create = function (route) {
   assert.equal(typeof route, 'string', 'route should be a string')
   // strip leading '/' and split routes
   var routes = route.replace(/^\//, '').split('/')
-  return (function createNode (index, trie) {
+
+  function createNode (index, trie) {
     var thisRoute = routes[index]
 
     if (thisRoute === undefined) return trie
@@ -42,7 +43,9 @@ Trie.prototype.create = function (route) {
 
     // we must recurse deeper
     return createNode(index + 1, node)
-  })(0, this.trie)
+  }
+
+  return createNode(0, this.trie)
 }
 
 // match a route on the trie
@@ -54,7 +57,7 @@ Trie.prototype.match = function (route) {
   var routes = route.replace(/^\//, '').split('/')
   var params = {}
 
-  var node = (function search (index, trie) {
+  function search (index, trie) {
     // either there's no match, or we're done searching
     if (trie === undefined) return undefined
     var thisRoute = routes[index]
@@ -71,7 +74,9 @@ Trie.prototype.match = function (route) {
       // no matches found
       return search(index + 1)
     }
-  })(0, this.trie)
+  }
+
+  var node = search(0, this.trie)
 
   if (!node) return undefined
   node = xtend(node)
