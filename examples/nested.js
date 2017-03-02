@@ -1,7 +1,7 @@
-const wayfarer = require('wayfarer')
+var wayfarer = require('wayfarer')
 
-const userRouter = wayfarer('err')
-const repoRouter = wayfarer()
+var userRouter = wayfarer('err')
+var repoRouter = wayfarer()
 
 userRouter.on('/err', () => console.error('path not found'))
 userRouter.on('/user/:user', repoRouter)
@@ -12,7 +12,7 @@ repoRouter.on('/:repo', params => {
 userRouter('/user/timoxley/linklocal')
 // => timoxley linklocal
 
-const commitRouter = wayfarer()
+var commitRouter = wayfarer()
 commitRouter.on('/commit/:hash', params => {
   console.log(params.user, params.repo, params.hash)
 })
