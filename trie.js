@@ -1,6 +1,6 @@
-const mutate = require('xtend/mutable')
-const assert = require('assert')
-const xtend = require('xtend')
+var mutate = require('xtend/mutable')
+var assert = require('assert')
+var xtend = require('xtend')
 
 module.exports = Trie
 
@@ -17,14 +17,14 @@ function Trie () {
 Trie.prototype.create = function (route) {
   assert.equal(typeof route, 'string', 'route should be a string')
   // strip leading '/' and split routes
-  const routes = route.replace(/^\//, '').split('/')
-  return (function createNode (index, trie, routes) {
-    const route = routes[index]
+  var routes = route.replace(/^\//, '').split('/')
+  return (function createNode (index, trie) {
+    var thisRoute = routes[index]
 
-    if (route === undefined) return trie
+    if (thisRoute === undefined) return trie
 
     var node = null
-    if (/^:/.test(route)) {
+    if (/^:/.test(thisRoute)) {
       // if node is a name match, set name and append to ':' node
       if (!trie.nodes['$$']) {
         node = { nodes: {} }
@@ -32,17 +32,17 @@ Trie.prototype.create = function (route) {
       } else {
         node = trie.nodes['$$']
       }
-      trie.name = route.replace(/^:/, '')
-    } else if (!trie.nodes[route]) {
+      trie.name = thisRoute.replace(/^:/, '')
+    } else if (!trie.nodes[thisRoute]) {
       node = { nodes: {} }
-      trie.nodes[route] = node
+      trie.nodes[thisRoute] = node
     } else {
-      node = trie.nodes[route]
+      node = trie.nodes[thisRoute]
     }
 
     // we must recurse deeper
-    return createNode(index + 1, node, routes)
-  })(0, this.trie, routes)
+    return createNode(index + 1, node)
+  })(0, this.trie)
 }
 
 // match a route on the trie
@@ -51,21 +51,21 @@ Trie.prototype.create = function (route) {
 Trie.prototype.match = function (route) {
   assert.equal(typeof route, 'string', 'route should be a string')
 
-  const routes = route.replace(/^\//, '').split('/')
-  const params = {}
+  var routes = route.replace(/^\//, '').split('/')
+  var params = {}
 
   var node = (function search (index, trie) {
     // either there's no match, or we're done searching
     if (trie === undefined) return undefined
-    const route = routes[index]
-    if (route === undefined) return trie
+    var thisRoute = routes[index]
+    if (thisRoute === undefined) return trie
 
-    if (trie.nodes[route]) {
+    if (trie.nodes[thisRoute]) {
       // match regular routes first
-      return search(index + 1, trie.nodes[route])
+      return search(index + 1, trie.nodes[thisRoute])
     } else if (trie.name) {
       // match named routes
-      params[trie.name] = decodeURIComponent(route)
+      params[trie.name] = decodeURIComponent(thisRoute)
       return search(index + 1, trie.nodes['$$'])
     } else {
       // no matches found
@@ -85,7 +85,7 @@ Trie.prototype.mount = function (route, trie) {
   assert.equal(typeof route, 'string', 'route should be a string')
   assert.equal(typeof trie, 'object', 'trie should be a object')
 
-  const split = route.replace(/^\//, '').split('/')
+  var split = route.replace(/^\//, '').split('/')
   var node = null
   var key = null
 
@@ -93,8 +93,8 @@ Trie.prototype.mount = function (route, trie) {
     key = split[0]
     node = this.create(key)
   } else {
-    const headArr = split.splice(0, split.length - 1)
-    const head = headArr.join('/')
+    var headArr = split.splice(0, split.length - 1)
+    var head = headArr.join('/')
     key = split[0]
     node = this.create(head)
   }
