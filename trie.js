@@ -24,7 +24,7 @@ Trie.prototype.create = function (route) {
     if (thisRoute === undefined) return trie
 
     var node = null
-    if (/^:/.test(thisRoute)) {
+    if (/^:|^\*/.test(thisRoute)) {
       // if node is a name match, set name and append to ':' node
       if (!trie.nodes['$$']) {
         node = { nodes: {} }
@@ -32,7 +32,12 @@ Trie.prototype.create = function (route) {
       } else {
         node = trie.nodes['$$']
       }
-      trie.name = thisRoute.replace(/^:/, '')
+
+      if (thisRoute[0] === '*') {
+        trie.wildcard = true
+      }
+
+      trie.name = thisRoute.replace(/^:|^\*/, '')
     } else if (!trie.nodes[thisRoute]) {
       node = { nodes: {} }
       trie.nodes[thisRoute] = node
@@ -63,6 +68,11 @@ Trie.prototype.match = function (route) {
     if (trie.nodes[thisRoute]) {
       // match regular routes first
       return search(index + 1, trie.nodes[thisRoute])
+    } else if (trie.wildcard) {
+      // match wildcards
+      params['wildcard'] = decodeURIComponent(routes.slice(index).join('/'))
+      // return early, or else search may keep recursing through the wildcard
+      return trie.nodes['$$']
     } else if (trie.name) {
       // match named routes
       params[trie.name] = decodeURIComponent(thisRoute)

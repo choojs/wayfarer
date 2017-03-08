@@ -195,4 +195,17 @@ tape('trie', function (t) {
     const r = wayfarer()
     t.equal(r, r.emit)
   })
+
+  t.test('wildcards', function (t) {
+    t.plan(1)
+    const r = wayfarer()
+
+    r.on('/bar/*', pass)
+    r('/bar/foo/beep/boop')
+
+    function pass (params) {
+      t.equal(params.wildcard, 'foo/beep/boop')
+    }
+  })
 })
+
