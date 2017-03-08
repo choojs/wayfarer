@@ -197,15 +197,20 @@ tape('trie', function (t) {
   })
 
   t.test('wildcards', function (t) {
-    t.plan(1)
+    t.plan(3)
     const r = wayfarer()
 
-    r.on('/bar/*', pass)
-    r('/bar/foo/beep/boop')
-
-    function pass (params) {
+    r.on('/bar/*', function (params) {
       t.equal(params.wildcard, 'foo/beep/boop')
-    }
+    })
+
+    r.on('/foo/:match/*', function (params) {
+      t.equal(params.match, 'bar')
+      t.equal(params.wildcard, 'beep/boop')
+    })
+
+    r('/bar/foo/beep/boop')
+    r('/foo/bar/beep/boop')
   })
 })
 
