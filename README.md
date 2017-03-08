@@ -31,12 +31,16 @@ const router = wayfarer('/404')
 router.on('/', () => console.log('/'))
 router.on('/404', () => console.log('404 not found'))
 router.on('/:user', (params) => console.log('user is %s', params.user))
+router.on('/wildcard/*', (params) => console.log('wildcard path is %s', params.wildcard))
 
 router('tobi')
 // => 'user is tobi'
 
 router('/uh/oh')
 // => '404 not found'
+
+router('/wildcard/example/path')
+// => 'wildcard path is example/path'
 ```
 
 ## Subrouting
