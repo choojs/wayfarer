@@ -24,9 +24,9 @@ $ npm install wayfarer
 
 ## Usage
 ```js
-const wayfarer = require('wayfarer')
+var wayfarer = require('wayfarer')
 
-const router = wayfarer('/404')
+var router = wayfarer('/404')
 
 router.on('/', () => console.log('/'))
 router.on('/404', () => console.log('404 not found'))
@@ -48,8 +48,8 @@ Routers can be infinitely nested, allowing routing to be scoped per view.
 Matched params are passed into subrouters. Nested routes will call their
 parent's default handler if no path matches.
 ```js
-const r1 = wayfarer()
-const r2 = wayfarer()
+var r1 = wayfarer()
+var r2 = wayfarer()
 
 r2.on('/child', () => console.log('subrouter trix!'))
 r1.on('/:parent', r2)
@@ -61,15 +61,15 @@ r1('/dada/child')
 ## Walk
 Sometimes it's necessary to walk the `trie` to apply transformations.
 ```js
-const walk = require('wayfarer/walk')
-const wayfarer = require('wayfarer')
+var walk = require('wayfarer/walk')
+var wayfarer = require('wayfarer')
 
-const router = wayfarer()
+var router = wayfarer()
 router.on('/multiply', (x, y) => x * y)
 router.on('/divide', (x, y) => x / y)
 
 walk(router, (route, cb) => {
-  const y = 2
+  var y = 2
   return function (params, x) {
     return cb(x, y)
   }

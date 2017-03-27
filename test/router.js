@@ -1,11 +1,11 @@
-const wayfarer = require('../')
-const noop = require('noop2')
-const tape = require('tape')
+var wayfarer = require('../')
+var noop = require('noop2')
+var tape = require('tape')
 
 tape('trie', function (t) {
   t.test('should match a path', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/', function () {
       t.pass('called')
     })
@@ -14,7 +14,7 @@ tape('trie', function (t) {
 
   t.test('should match a nested path', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/foo/bar', function () {
       t.pass('called')
     })
@@ -23,7 +23,7 @@ tape('trie', function (t) {
 
   t.test('should match a default path', function (t) {
     t.plan(1)
-    const r = wayfarer('/404')
+    var r = wayfarer('/404')
     r.on('/404', function () {
       t.pass('default')
     })
@@ -32,9 +32,9 @@ tape('trie', function (t) {
 
   t.test('should allow passing of extra values', function (t) {
     t.plan(2)
-    const foo = {}
-    const bar = {}
-    const r = wayfarer()
+    var foo = {}
+    var bar = {}
+    var r = wayfarer()
     r.on('/foo', function (params, arg1, arg2) {
       t.equal(arg1, foo, 'arg1 was passed')
       t.equal(arg2, bar, 'arg2 was passed')
@@ -44,14 +44,14 @@ tape('trie', function (t) {
 
   t.test('.on() should catch type errors', function (t) {
     t.plan(2)
-    const r = wayfarer()
+    var r = wayfarer()
     t.throws(r.on.bind(r, 123), /string/, 'string')
     t.throws(r.on.bind(r, '/hi', 123), /function/, 'function')
   })
 
   t.test('.emit() should match paths', function (t) {
     t.plan(2)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/foo/bar', function (param) {
       t.pass('bar called')
     })
@@ -64,7 +64,7 @@ tape('trie', function (t) {
 
   t.test('.emit() should match partials', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/:user', function (param) {
       t.equal(param.user, 'tobi', 'param matched')
     })
@@ -73,7 +73,7 @@ tape('trie', function (t) {
 
   t.test('.emit() should match paths before partials', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/foo', function () {
       t.pass('called')
     })
@@ -83,7 +83,7 @@ tape('trie', function (t) {
 
   t.test('.emit() should allow path overriding', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/:user', noop)
     r.on('/:user', function () {
       t.pass('called')
@@ -93,7 +93,7 @@ tape('trie', function (t) {
 
   t.test('.emit() should match nested partials', function (t) {
     t.plan(2)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/:user/:name', function (param) {
       t.equal(param.user, 'tobi', 'param matched')
       t.equal(param.name, 'baz', 'param matched')
@@ -103,7 +103,7 @@ tape('trie', function (t) {
 
   t.test('.emit() should parse encoded params', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     r.on('/:channel', function (param) {
       t.equal(param.channel, '#choo', 'param matched')
     })
@@ -112,13 +112,13 @@ tape('trie', function (t) {
 
   t.test('.emit() should throw if no matches are found', function (t) {
     t.plan(1)
-    const r1 = wayfarer()
+    var r1 = wayfarer()
     t.throws(r1.bind(r1, '/woops'), /route/, 'no matches found')
   })
 
   t.test('.emit() should return values', function (t) {
     t.plan(1)
-    const r1 = wayfarer()
+    var r1 = wayfarer()
     r1.on('/foo', function () {
       return 'hello'
     })
@@ -128,20 +128,20 @@ tape('trie', function (t) {
   t.test('.emit() mount subrouters', function (t) {
     t.plan(5)
 
-    const r4 = wayfarer()
-    const r3 = wayfarer()
+    var r4 = wayfarer()
+    var r3 = wayfarer()
     r4.on('/kidlette', function () { t.pass('nested 2 levels') })
     r3.on('/mom', r4)
     r3('/mom/kidlette')
 
-    const r1 = wayfarer()
-    const r2 = wayfarer()
+    var r1 = wayfarer()
+    var r2 = wayfarer()
     r2.on('/', function () { t.pass('nested 1 level') })
     r1.on('/home', r2)
     r1('/home')
 
-    const r5 = wayfarer()
-    const r6 = wayfarer()
+    var r5 = wayfarer()
+    var r6 = wayfarer()
     r6.on('/child', function (param) {
       t.equal(typeof param, 'object', 'param is passed')
       t.equal(param.parent, 'hello', 'nested 2 levels with params')
@@ -149,17 +149,17 @@ tape('trie', function (t) {
     r5.on('/:parent', r6)
     r5('/hello/child')
 
-    const r7 = wayfarer()
-    const r8 = wayfarer()
-    const r9 = wayfarer()
+    var r7 = wayfarer()
+    var r8 = wayfarer()
+    var r9 = wayfarer()
     r9.on('/bar', function (param) { t.pass('called', 'nested 3 levels') })
     r8.on('/bin', r9)
     r7.on('/foo', r8)
     r7('/foo/bin/bar')
 
-    // const r10 = wayfarer()
-    // const r11 = wayfarer()
-    // const r12 = wayfarer()
+    // var r10 = wayfarer()
+    // var r11 = wayfarer()
+    // var r12 = wayfarer()
     // r12.on('/:grandchild', function (param) {
     //   t.equal(param.parent, 'bin', 'nested 3 levels with params')
     //   t.equal(param.child, 'bar', 'nested 3 levels with params')
@@ -172,9 +172,9 @@ tape('trie', function (t) {
 
   t.test('nested routes should call parent default route', function (t) {
     t.plan(4)
-    const r1 = wayfarer('/404')
-    const r2 = wayfarer()
-    const r3 = wayfarer()
+    var r1 = wayfarer('/404')
+    var r2 = wayfarer()
+    var r3 = wayfarer()
 
     r2.on('/bar', r3)
     r1.on('foo', r2)
@@ -192,13 +192,13 @@ tape('trie', function (t) {
 
   t.test('aliases', function (t) {
     t.plan(1)
-    const r = wayfarer()
+    var r = wayfarer()
     t.equal(r, r.emit)
   })
 
   t.test('wildcards', function (t) {
     t.plan(3)
-    const r = wayfarer()
+    var r = wayfarer()
 
     r.on('/bar/*', function (params) {
       t.equal(params.wildcard, 'foo/beep/boop')

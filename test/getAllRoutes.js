@@ -1,6 +1,6 @@
-const wayfarer = require('../')
-const getAllRoutes = require('../get-all-routes')
-const tape = require('tape')
+var wayfarer = require('../')
+var getAllRoutes = require('../get-all-routes')
+var tape = require('tape')
 
 tape('getAllRoutes', function (t) {
   t.test('should assert input types', function (t) {
@@ -10,11 +10,11 @@ tape('getAllRoutes', function (t) {
 
   t.test('should getAllRoutes', function (t) {
     t.plan(4)
-    const router = wayfarer()
+    var router = wayfarer()
     router.on('/foo', function (x, y) { return x * y })
     router.on('/bar', function (x, y) { return x / y })
 
-    const routes = getAllRoutes(router)
+    var routes = getAllRoutes(router)
 
     t.equal(routes instanceof Object, true)
     t.equal(Object.keys(routes).length, 2)
@@ -24,13 +24,13 @@ tape('getAllRoutes', function (t) {
 
   t.test('should getAllRoutes from a nested tree', function (t) {
     t.plan(6)
-    const router = wayfarer()
+    var router = wayfarer()
     router.on('/foo', function (x, y) { return x * y + 2 })
     router.on('/foo/baz', function (x, y) { return x * y })
     router.on('/bar/bin/barb', function (x, y) { return x / y })
     router.on('/bar/bin/bla', function (x, y) { return x / y })
 
-    const routes = getAllRoutes(router)
+    var routes = getAllRoutes(router)
 
     t.equal(routes instanceof Object, true)
     t.equal(Object.keys(routes).length, 4)
@@ -42,12 +42,12 @@ tape('getAllRoutes', function (t) {
 
   t.test('should getAllRoutes from a routes with params', function (t) {
     t.plan(5)
-    const router = wayfarer()
+    var router = wayfarer()
     router.on('/foo', function (x, y) { return x / y })
     router.on('/foo/:slug', function (x, y) { return x * y + 2 })
     router.on('/foo/:slug/:id', function (x, y) { return x * y })
 
-    const routes = getAllRoutes(router)
+    var routes = getAllRoutes(router)
 
     t.equal(routes instanceof Object, true)
     t.equal(Object.keys(routes).length, 3)

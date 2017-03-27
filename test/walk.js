@@ -1,7 +1,7 @@
-const wayfarer = require('../')
-const walk = require('../walk')
-const noop = require('noop2')
-const tape = require('tape')
+var wayfarer = require('../')
+var walk = require('../walk')
+var noop = require('noop2')
+var tape = require('tape')
 
 tape('walk', function (t) {
   t.test('should assert input types', function (t) {
@@ -13,12 +13,12 @@ tape('walk', function (t) {
 
   t.test('should walk a trie', function (t) {
     t.plan(2)
-    const router = wayfarer()
+    var router = wayfarer()
     router.on('/foo', function (x, y) { return x * y })
     router.on('/bar', function (x, y) { return x / y })
 
     walk(router, function (route, cb) {
-      const y = 2
+      var y = 2
       return function (params, x) {
         return cb(x, y)
       }
@@ -30,13 +30,13 @@ tape('walk', function (t) {
 
   t.test('should walk a nested trie', function (t) {
     t.plan(3)
-    const router = wayfarer()
+    var router = wayfarer()
     router.on('/foo/baz', function (x, y) { return x * y })
     router.on('/bar/bin/barb', function (x, y) { return x / y })
     router.on('/bar/bin/bla', function (x, y) { return x / y })
 
     walk(router, function (route, cb) {
-      const y = 2
+      var y = 2
       return function (params, x) {
         return cb(x, y)
       }
@@ -49,7 +49,7 @@ tape('walk', function (t) {
 
   t.test('should walk partials', function (t) {
     t.plan(4)
-    const router = wayfarer()
+    var router = wayfarer()
     router.on('/foo', function (route) { return route })
     router.on('/:foo', function (route) { return route })
     router.on('/:foo/bar', function (route) { return route })
