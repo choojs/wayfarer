@@ -20,14 +20,13 @@ Trie.prototype.create = function (route) {
   var routes = route.replace(/^\//, '').split('/')
 
   function createNode (index, trie) {
-    var thisRoute = routes[index]
-
-    if (thisRoute === undefined) return trie
+    var thisRoute = (routes.hasOwnProperty(index) && routes[index])
+    if (thisRoute === false) return trie
 
     var node = null
     if (/^:|^\*/.test(thisRoute)) {
       // if node is a name match, set name and append to ':' node
-      if (!trie.nodes['$$']) {
+      if (!trie.nodes.hasOwnProperty('$$')) {
         node = { nodes: {} }
         trie.nodes['$$'] = node
       } else {
@@ -39,7 +38,7 @@ Trie.prototype.create = function (route) {
       }
 
       trie.name = thisRoute.replace(/^:|^\*/, '')
-    } else if (!trie.nodes[thisRoute]) {
+    } else if (!trie.nodes.hasOwnProperty(thisRoute)) {
       node = { nodes: {} }
       trie.nodes[thisRoute] = node
     } else {
@@ -68,7 +67,7 @@ Trie.prototype.match = function (route) {
     var thisRoute = routes[index]
     if (thisRoute === undefined) return trie
 
-    if (trie.nodes[thisRoute]) {
+    if (trie.nodes.hasOwnProperty(thisRoute)) {
       // match regular routes first
       return search(index + 1, trie.nodes[thisRoute])
     } else if (trie.wildcard) {
