@@ -33,12 +33,5 @@
     "noop2": "^2.0.0",
     "standard": "^8.4.0",
     "tape": "^4.6.2"
-  },
-  "files": [
-    "LICENSE",
-    "index.js",
-    "trie.js",
-    "walk.js",
-    "README.md"
-  ]
+  }
 }
