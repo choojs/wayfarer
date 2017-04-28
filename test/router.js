@@ -212,5 +212,40 @@ tape('trie', function (t) {
     r('/bar/foo/beep/boop')
     r('/foo/bar/beep/boop')
   })
-})
 
+  t.test('safe decodeURIComponent', function (t) {
+    t.plan(1)
+    var r = wayfarer('/404')
+    r.on('/test/:id', function (params) {
+      t.fail('we should not be here')
+    })
+    r.on('/404', function () {
+      t.pass('called')
+    })
+    r('/test/hel%"Flo')
+  })
+
+  t.test('safe decodeURIComponent - nested route', function (t) {
+    t.plan(1)
+    var r = wayfarer('/404')
+    r.on('/test/hello/world/:id/blah', function (params) {
+      t.fail('we should not be here')
+    })
+    r.on('/404', function () {
+      t.pass('called')
+    })
+    r('/test/hello/world/hel%"Flo/blah')
+  })
+
+  t.test('safe decodeURIComponent - wildcard', function (t) {
+    t.plan(1)
+    var r = wayfarer('/404')
+    r.on('/test/*', function (params) {
+      t.fail('we should not be here')
+    })
+    r.on('/404', function () {
+      t.pass('called')
+    })
+    r('/test/hel%"Flo')
+  })
+})
