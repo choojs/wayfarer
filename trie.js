@@ -72,12 +72,21 @@ Trie.prototype.match = function (route) {
       return search(index + 1, trie.nodes[thisRoute])
     } else if (trie.wildcard) {
       // match wildcards
-      params['wildcard'] = decodeURIComponent(routes.slice(index).join('/'))
+      try {
+        params['wildcard'] = decodeURIComponent(routes.slice(index).join('/'))
+      } catch (e) {
+        return search(index, undefined)
+      }
       // return early, or else search may keep recursing through the wildcard
       return trie.nodes['$$']
     } else if (trie.name) {
       // match named routes
-      params[trie.name] = decodeURIComponent(thisRoute)
+      try {
+        params[trie.name] = decodeURIComponent(thisRoute)
+      } catch (e) {
+        console.log('must throw')
+        return search(index, undefined)
+      }
       return search(index + 1, trie.nodes['$$'])
     } else {
       // no matches found
