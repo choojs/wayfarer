@@ -1,6 +1,6 @@
 {
   "name": "wayfarer",
-  "version": "6.5.3",
+  "version": "6.6.0",
   "description": "Composable trie based router",
   "main": "index.js",
   "scripts": {
