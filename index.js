@@ -25,6 +25,7 @@ function Wayfarer (dft) {
     assert.equal(typeof cb, 'function')
 
     route = route || '/'
+    cb.route = route
 
     if (cb && cb._wayfarer && cb._trie) {
       _trie.mount(route, cb._trie.trie)
@@ -48,13 +49,15 @@ function Wayfarer (dft) {
     var node = _trie.match(route)
     if (node && node.cb) {
       args[0] = node.params
-      return node.cb.apply(null, args)
+      var cb = node.cb
+      return cb.apply(cb, args)
     }
 
     var dft = _trie.match(_default)
     if (dft && dft.cb) {
       args[0] = dft.params
-      return dft.cb.apply(null, args)
+      var dftcb = dft.cb
+      return dftcb.apply(dftcb, args)
     }
 
     throw new Error("route '" + route + "' did not match")

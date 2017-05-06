@@ -248,4 +248,13 @@ tape('trie', function (t) {
     })
     r('/test/hel%"Flo')
   })
+
+  t.test('should expose .router property', function (t) {
+    t.plan(1)
+    var r = wayfarer()
+    r.on('/foo', function () {
+      t.equal(this.route, '/foo', 'exposes route property')
+    })
+    r('/foo')
+  })
 })
