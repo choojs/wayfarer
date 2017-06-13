@@ -84,7 +84,6 @@ Trie.prototype.match = function (route) {
       try {
         params[trie.name] = decodeURIComponent(thisRoute)
       } catch (e) {
-        console.log('must throw')
         return search(index, undefined)
       }
       return search(index + 1, trie.nodes['$$'])
