@@ -213,6 +213,38 @@ tape('trie', function (t) {
     r('/foo/bar/beep/boop')
   })
 
+  t.test('wildcards dont conflict with params', function (t) {
+    t.plan(3)
+    var router
+
+    router = wayfarer()
+    router.on('/*', function (params) {
+      t.fail('wildcard called')
+    })
+    router.on('/:match', function (params) {
+      t.pass('param called')
+    })
+    router('/foo')
+
+    router = wayfarer()
+    router.on('/*', function (params) {
+      t.fail('wildcard called')
+    })
+    router.on('/:match/foo', function (params) {
+      t.pass('param called')
+    })
+    router('/foo/foo')
+
+    router = wayfarer()
+    router.on('/*', function (params) {
+      t.pass('wildcard called')
+    })
+    router.on('/:match/foo', function (params) {
+      t.fail('param called')
+    })
+    router('/foo/bar')
+  })
+
   t.test('safe decodeURIComponent', function (t) {
     t.plan(1)
     var r = wayfarer('/404')

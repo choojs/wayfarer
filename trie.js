@@ -70,6 +70,14 @@ Trie.prototype.match = function (route) {
     if (trie.nodes.hasOwnProperty(thisRoute)) {
       // match regular routes first
       return search(index + 1, trie.nodes[thisRoute])
+    } else if (trie.name) {
+      // match named routes
+      try {
+        params[trie.name] = decodeURIComponent(thisRoute)
+      } catch (e) {
+        return search(index, undefined)
+      }
+      return search(index + 1, trie.nodes['$$'])
     } else if (trie.wildcard) {
       // match wildcards
       try {
@@ -79,14 +87,6 @@ Trie.prototype.match = function (route) {
       }
       // return early, or else search may keep recursing through the wildcard
       return trie.nodes['$$']
-    } else if (trie.name) {
-      // match named routes
-      try {
-        params[trie.name] = decodeURIComponent(thisRoute)
-      } catch (e) {
-        return search(index, undefined)
-      }
-      return search(index + 1, trie.nodes['$$'])
     } else {
       // no matches found
       return search(index + 1)
