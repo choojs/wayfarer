@@ -91,6 +91,9 @@ Register a new route. The order in which routes are registered does not matter.
 Routes can register multiple callbacks. The callback can return values when
 called.
 
+### matchedRoute = router.match(route)
+Matches a route and returns an object. The returned object contains the properties `{cb, params, route}`. This method does not invoke the callback of a route. If no route matches, the default route will be returned. If no default route matches, an error will be thrown.
+
 ### val = router(route, [arg1, ...])
 Match a route and execute the corresponding callback. Alias: `router.emit()`.
 Returns a values from the matched route (e.g. useful for streams). Any

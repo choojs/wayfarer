@@ -2,7 +2,7 @@ var wayfarer = require('../')
 var noop = require('noop2')
 var tape = require('tape')
 
-tape('trie', function (t) {
+tape('router', function (t) {
   t.test('should match a path', function (t) {
     t.plan(1)
     var r = wayfarer()
@@ -62,6 +62,21 @@ tape('trie', function (t) {
     r('/foo/baz')
   })
 
+  t.test('.match() should match paths', function (t) {
+    t.plan(2)
+    var r = wayfarer()
+    r.on('/foo/bar', function () {
+      t.fail('should not call callback')
+    })
+    r.on('/foo/baz', noop)
+
+    var bar = r.match('/foo/bar')
+    t.equal(bar.route, '/foo/bar')
+
+    var baz = r.match('/foo/baz')
+    t.equal(baz.route, '/foo/baz')
+  })
+
   t.test('.emit() should match partials', function (t) {
     t.plan(1)
     var r = wayfarer()
@@ -69,6 +84,14 @@ tape('trie', function (t) {
       t.equal(param.user, 'tobi', 'param matched')
     })
     r('/tobi')
+  })
+
+  t.test('.match() should match partials', function (t) {
+    t.plan(1)
+    var r = wayfarer()
+    r.on('/:user', noop)
+    var toby = r.match('/tobi')
+    t.equal(toby.params.user, 'tobi')
   })
 
   t.test('.emit() should match paths before partials', function (t) {
@@ -84,7 +107,9 @@ tape('trie', function (t) {
   t.test('.emit() should allow path overriding', function (t) {
     t.plan(1)
     var r = wayfarer()
-    r.on('/:user', noop)
+    r.on('/:user', function () {
+      t.fail('wrong callback called')
+    })
     r.on('/:user', function () {
       t.pass('called')
     })
@@ -168,6 +193,16 @@ tape('trie', function (t) {
     // r11.on('/:child', r12)
     // r10.on('/foo/:parent', r11)
     // r10('/foo/bin/bar/baz')
+  })
+
+  t.test('.match() returns a handler of a route', function (t) {
+    t.plan(1)
+    var r = wayfarer()
+    r.on('/:user', function () {
+      t.pass('called')
+    })
+    var toby = r.match('/tobi')
+    toby.cb()
   })
 
   t.test('nested routes should call parent default route', function (t) {
@@ -281,7 +316,7 @@ tape('trie', function (t) {
     r('/test/hel%"Flo')
   })
 
-  t.test('should expose .router property', function (t) {
+  t.test('should expose .route property', function (t) {
     t.plan(1)
     var r = wayfarer()
     r.on('/foo', function () {
