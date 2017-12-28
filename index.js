@@ -12,8 +12,9 @@ function Wayfarer (dft) {
   var _trie = trie()
 
   emit._trie = _trie
-  emit.emit = emit
   emit.on = on
+  emit.emit = emit
+  emit.match = match
   emit._wayfarer = true
 
   return emit
@@ -40,26 +41,32 @@ function Wayfarer (dft) {
   // match and call a route
   // (str, obj?) -> null
   function emit (route) {
-    assert.notEqual(route, undefined, "'route' must be defined")
+    var matched = match(route)
+
     var args = new Array(arguments.length)
+    args[0] = matched.params
     for (var i = 1; i < args.length; i++) {
       args[i] = arguments[i]
     }
 
-    var node = _trie.match(route)
-    if (node && node.cb) {
-      args[0] = node.params
-      var cb = node.cb
-      return cb.apply(cb, args)
-    }
+    return matched.cb.apply(matched.cb, args)
+  }
+
+  function match (route) {
+    assert.notEqual(route, undefined, "'route' must be defined")
+
+    var matched = _trie.match(route)
+    if (matched && matched.cb) return new Route(matched)
 
     var dft = _trie.match(_default)
-    if (dft && dft.cb) {
-      args[0] = dft.params
-      var dftcb = dft.cb
-      return dftcb.apply(dftcb, args)
-    }
+    if (dft && dft.cb) return new Route(dft)
 
     throw new Error("route '" + route + "' did not match")
+  }
+
+  function Route (matched) {
+    this.cb = matched.cb
+    this.route = matched.cb.route
+    this.params = matched.params
   }
 }
