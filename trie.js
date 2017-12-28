@@ -115,8 +115,7 @@ Trie.prototype.mount = function (route, trie) {
     key = split[0]
     node = this.create(key)
   } else {
-    var headArr = split.splice(0, split.length - 1)
-    var head = headArr.join('/')
+    var head = split.join('/')
     key = split[0]
     node = this.create(head)
   }

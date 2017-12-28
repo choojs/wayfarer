@@ -181,18 +181,35 @@ tape('router', function (t) {
     r8.on('/bin', r9)
     r7.on('/foo', r8)
     r7('/foo/bin/bar')
+  })
 
-    // var r10 = wayfarer()
-    // var r11 = wayfarer()
-    // var r12 = wayfarer()
-    // r12.on('/:grandchild', function (param) {
-    //   t.equal(param.parent, 'bin', 'nested 3 levels with params')
-    //   t.equal(param.child, 'bar', 'nested 3 levels with params')
-    //   t.equal(param.grandchild, 'baz', 'nested 3 levels with parmas')
-    // })
-    // r11.on('/:child', r12)
-    // r10.on('/foo/:parent', r11)
-    // r10('/foo/bin/bar/baz')
+  t.test('.emit() should match nested partials of subrouters', function (t) {
+    t.plan(3)
+    var r1 = wayfarer()
+    var r2 = wayfarer()
+    var r3 = wayfarer()
+    r3.on('/:grandchild', function (param) {
+      t.equal(param.parent, 'bin', 'nested 3 levels with params')
+      t.equal(param.child, 'bar', 'nested 3 levels with params')
+      t.equal(param.grandchild, 'baz', 'nested 3 levels with parmas')
+    })
+    r2.on('/:child', r3)
+    r1.on('/foo/:parent', r2)
+    r1('/foo/bin/bar/baz')
+  })
+
+  t.test('.match() should return nested partials of subrouters', function (t) {
+    t.plan(3)
+    var r1 = wayfarer()
+    var r2 = wayfarer()
+    var r3 = wayfarer()
+    r3.on('/:grandchild', noop)
+    r2.on('/:child', r3)
+    r1.on('/foo/:parent', r2)
+    var matched = r1.match('/foo/bin/bar/baz')
+    t.equal(matched.params.parent, 'bin')
+    t.equal(matched.params.child, 'bar')
+    t.equal(matched.params.grandchild, 'baz')
   })
 
   t.test('.match() returns a handler of a route', function (t) {
