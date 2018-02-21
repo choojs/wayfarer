@@ -341,4 +341,18 @@ tape('router', function (t) {
     })
     r('/foo')
   })
+
+  t.test('should not mutate callback parameter', function (t) {
+    t.plan(4)
+    var r = wayfarer()
+    var routes = ['/foo', '/bar']
+    r.on('/foo', callback)
+    r.on('/bar', callback)
+    r('/foo')
+    r('/bar')
+    function callback () {
+      t.notEqual(this, callback, 'callback was proxied')
+      t.equal(this.route, routes.shift(), 'proxy exposes route property')
+    }
+  })
 })
