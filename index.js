@@ -21,26 +21,21 @@ function Wayfarer (dft) {
 
   // define a route
   // (str, fn) -> obj
-  function on (route, fn) {
+  function on (route, cb) {
     assert.equal(typeof route, 'string')
-    assert.equal(typeof fn, 'function')
+    assert.equal(typeof cb, 'function')
 
-    var cb = fn._wayfarer && fn._trie ? fn : proxy
     route = route || '/'
-    cb.route = route
 
     if (cb._wayfarer && cb._trie) {
       _trie.mount(route, cb._trie.trie)
     } else {
       var node = _trie.create(route)
       node.cb = cb
+      node.route = route
     }
 
     return emit
-
-    function proxy () {
-      return fn.apply(this, Array.prototype.slice.call(arguments))
-    }
   }
 
   // match and call a route
@@ -71,7 +66,7 @@ function Wayfarer (dft) {
 
   function Route (matched) {
     this.cb = matched.cb
-    this.route = matched.cb.route
+    this.route = matched.route
     this.params = matched.params
   }
 }
