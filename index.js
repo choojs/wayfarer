@@ -3,6 +3,21 @@ var trie = require('./trie')
 
 module.exports = Wayfarer
 
+const clone = function (fn) {
+  var cloneObj = fn
+  if (cloneObj.__isClone) {
+    cloneObj = cloneObj.__clonedFrom
+  }
+
+  var temp = function () { return cloneObj.apply(fn, arguments) }
+  Object.assign(temp, fn)
+
+  temp.__isClone = true
+  temp.__clonedFrom = cloneObj
+
+  return temp
+}
+
 // create a router
 // str -> obj
 function Wayfarer (dft) {
@@ -33,7 +48,7 @@ function Wayfarer (dft) {
       _trie.mount(route, cb._trie.trie)
     } else {
       var node = _trie.create(route)
-      node.cb = cb
+      node.cb = clone(cb)
     }
 
     return emit
