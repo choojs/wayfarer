@@ -336,23 +336,33 @@ tape('router', function (t) {
   t.test('should expose .route property', function (t) {
     t.plan(1)
     var r = wayfarer()
-    r.on('/foo', function () {
-      t.equal(this.route, '/foo', 'exposes route property')
+    r.on('/foo', function () {})
+    t.equal(r.match('/foo').route, '/foo', 'exposes route property')
+  })
+
+  t.test('should be called with self', function (t) {
+    t.plan(1)
+    var r = wayfarer()
+    r.on('/foo', function callback () {
+      t.equal(this, callback, 'calling context is self')
     })
     r('/foo')
   })
 
-  t.test('should not mutate callback parameter', function (t) {
-    t.plan(4)
+  t.test('can register callback on many routes', function (t) {
+    t.plan(6)
     var r = wayfarer()
     var routes = ['/foo', '/bar']
     r.on('/foo', callback)
     r.on('/bar', callback)
-    r('/foo')
-    r('/bar')
+    for (var i = 0, len = routes.length, matched; i < len; i++) {
+      matched = r.match(routes[i])
+      t.equal(matched.cb, callback, 'matched callback is same')
+      t.equal(matched.route, routes[i], 'matched route is same')
+      r(routes[i])
+    }
     function callback () {
-      t.notEqual(this, callback, 'callback was proxied')
-      t.equal(this.route, routes.shift(), 'proxy exposes route property')
+      t.equal(this, callback, 'calling context is same')
     }
   })
 })

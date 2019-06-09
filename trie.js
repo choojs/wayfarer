@@ -11,7 +11,7 @@ function Trie () {
 
 // create a node on the trie at route
 // and return a node
-// str -> null
+// str -> obj
 Trie.prototype.create = function (route) {
   assert.equal(typeof route, 'string', 'route should be a string')
   // strip leading '/' and split routes
