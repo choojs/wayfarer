@@ -1,6 +1,4 @@
-var mutate = require('xtend/mutable')
 var assert = require('assert')
-var xtend = require('xtend')
 
 module.exports = Trie
 
@@ -96,7 +94,7 @@ Trie.prototype.match = function (route) {
   var node = search(0, this.trie)
 
   if (!node) return undefined
-  node = xtend(node)
+  node = Object.assign({}, node)
   node.params = params
   return node
 }
@@ -120,7 +118,7 @@ Trie.prototype.mount = function (route, trie) {
     node = this.create(head)
   }
 
-  mutate(node.nodes, trie.nodes)
+  Object.assign(node.nodes, trie.nodes)
   if (trie.name) node.name = trie.name
 
   // delegate properties from '/' to the new node
@@ -130,7 +128,7 @@ Trie.prototype.mount = function (route, trie) {
       if (key === 'nodes') return
       node[key] = node.nodes[''][key]
     })
-    mutate(node.nodes, node.nodes[''].nodes)
+    Object.assign(node.nodes, node.nodes[''].nodes)
     delete node.nodes[''].nodes
   }
 }
