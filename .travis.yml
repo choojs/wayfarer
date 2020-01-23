@@ -8,6 +8,6 @@ node_js:
 sudo: false
 language: node_js
 script:
-  - "npm run test-cov"
+  - "if [ $TRAVIS_NODE_VERSION < 8 ]; then npm run test-no-cov; else npm run test-cov; fi"
   - "if [ $TRAVIS_NODE_VERSION == stable ]; then npx standard; fi"
 after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"

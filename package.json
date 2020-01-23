@@ -4,8 +4,9 @@
   "description": "Composable trie based router",
   "main": "index.js",
   "scripts": {
-    "test": "standard && NODE_ENV=test tape test/*",
-    "test-cov": "NODE_ENV=test nyc tape -- test/*"
+    "test": "standard && npm run test-no-cov",
+    "test-cov": "NODE_ENV=test nyc tape test/*",
+    "test-no-cov": "NODE_ENV=test tape test/*"
   },
   "repository": "choojs/wayfarer",
   "keywords": [
