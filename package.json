@@ -7,7 +7,7 @@
     "test": "standard && NODE_ENV=test tape test/*",
     "test-cov": "NODE_ENV=test istanbul cover tape -- test/*"
   },
-  "repository": "yoshuawuyts/wayfarer",
+  "repository": "choojs/wayfarer",
   "keywords": [
     "router",
     "trie",
