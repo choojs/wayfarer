@@ -28,7 +28,7 @@
   "devDependencies": {
     "noop2": "^2.0.0",
     "nyc": "^15.0.0",
-    "standard": "^8.4.0",
+    "standard": "^14.3.1",
     "tape": "^4.6.2"
   }
 }

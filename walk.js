@@ -1,3 +1,4 @@
+/* eslint-disable node/no-deprecated-api */
 var assert = require('assert')
 
 module.exports = walk

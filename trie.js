@@ -1,3 +1,4 @@
+/* eslint-disable node/no-deprecated-api */
 var assert = require('assert')
 
 module.exports = Trie
@@ -18,17 +19,17 @@ Trie.prototype.create = function (route) {
   var routes = route.replace(/^\//, '').split('/')
 
   function createNode (index, trie) {
-    var thisRoute = (routes.hasOwnProperty(index) && routes[index])
+    var thisRoute = (has(routes, index) && routes[index])
     if (thisRoute === false) return trie
 
     var node = null
     if (/^:|^\*/.test(thisRoute)) {
       // if node is a name match, set name and append to ':' node
-      if (!trie.nodes.hasOwnProperty('$$')) {
+      if (!has(trie.nodes, '$$')) {
         node = { nodes: {} }
-        trie.nodes['$$'] = node
+        trie.nodes.$$ = node
       } else {
-        node = trie.nodes['$$']
+        node = trie.nodes.$$
       }
 
       if (thisRoute[0] === '*') {
@@ -36,7 +37,7 @@ Trie.prototype.create = function (route) {
       }
 
       trie.name = thisRoute.replace(/^:|^\*/, '')
-    } else if (!trie.nodes.hasOwnProperty(thisRoute)) {
+    } else if (!has(trie.nodes, thisRoute)) {
       node = { nodes: {} }
       trie.nodes[thisRoute] = node
     } else {
@@ -65,7 +66,7 @@ Trie.prototype.match = function (route) {
     var thisRoute = routes[index]
     if (thisRoute === undefined) return trie
 
-    if (trie.nodes.hasOwnProperty(thisRoute)) {
+    if (has(trie.nodes, thisRoute)) {
       // match regular routes first
       return search(index + 1, trie.nodes[thisRoute])
     } else if (trie.name) {
@@ -75,16 +76,16 @@ Trie.prototype.match = function (route) {
       } catch (e) {
         return search(index, undefined)
       }
-      return search(index + 1, trie.nodes['$$'])
+      return search(index + 1, trie.nodes.$$)
     } else if (trie.wildcard) {
       // match wildcards
       try {
-        params['wildcard'] = decodeURIComponent(routes.slice(index).join('/'))
+        params.wildcard = decodeURIComponent(routes.slice(index).join('/'))
       } catch (e) {
         return search(index, undefined)
       }
       // return early, or else search may keep recursing through the wildcard
-      return trie.nodes['$$']
+      return trie.nodes.$$
     } else {
       // no matches found
       return search(index + 1)
@@ -131,4 +132,8 @@ Trie.prototype.mount = function (route, trie) {
     Object.assign(node.nodes, node.nodes[''].nodes)
     delete node.nodes[''].nodes
   }
+}
+
+function has (object, property) {
+  return Object.prototype.hasOwnProperty.call(object, property)
 }
