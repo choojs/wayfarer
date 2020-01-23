@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "standard && NODE_ENV=test tape test/*",
-    "test-cov": "NODE_ENV=test istanbul cover tape -- test/*"
+    "test-cov": "NODE_ENV=test nyc tape -- test/*"
   },
   "repository": "choojs/wayfarer",
   "keywords": [
@@ -26,9 +26,8 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
     "noop2": "^2.0.0",
+    "nyc": "^15.0.0",
     "standard": "^8.4.0",
     "tape": "^4.6.2"
   }
