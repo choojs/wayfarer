@@ -4,8 +4,9 @@
   "description": "Composable trie based router",
   "main": "index.js",
   "scripts": {
-    "test": "standard && NODE_ENV=test tape test/*",
-    "test-cov": "NODE_ENV=test istanbul cover tape -- test/*"
+    "test": "standard && npm run test-no-cov",
+    "test-cov": "NODE_ENV=test nyc tape test/*",
+    "test-no-cov": "NODE_ENV=test tape test/*"
   },
   "repository": "choojs/wayfarer",
   "keywords": [
@@ -31,10 +32,9 @@
     "nanoassert": "^1.1.0"
   },
   "devDependencies": {
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
     "noop2": "^2.0.0",
-    "standard": "^8.4.0",
+    "nyc": "^15.0.0",
+    "standard": "^14.3.1",
     "tape": "^4.6.2"
   }
 }
