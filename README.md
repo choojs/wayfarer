@@ -144,10 +144,10 @@ strip it of querystrings and hashes using the
 [1]: https://nodejs.org/api/documentation.html#documentation_stability_index
 [2]: https://img.shields.io/npm/v/wayfarer.svg?style=flat-square
 [3]: https://npmjs.org/package/wayfarer
-[4]: https://img.shields.io/travis/yoshuawuyts/wayfarer/master.svg?style=flat-square
-[5]: https://travis-ci.org/yoshuawuyts/wayfarer
-[6]: https://img.shields.io/codecov/c/github/yoshuawuyts/wayfarer/master.svg?style=flat-square
-[7]: https://codecov.io/github/yoshuawuyts/wayfarer
+[4]: https://img.shields.io/travis/choojs/wayfarer/master.svg?style=flat-square
+[5]: https://travis-ci.org/choojs/wayfarer
+[6]: https://img.shields.io/codecov/c/github/choojs/wayfarer/master.svg?style=flat-square
+[7]: https://codecov.io/github/choojs/wayfarer
 [8]: http://img.shields.io/npm/dm/wayfarer.svg?style=flat-square
 [9]: https://npmjs.org/package/wayfarer
 [10]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
