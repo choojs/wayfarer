@@ -25,7 +25,12 @@
     "browser"
   ],
   "license": "MIT",
-  "dependencies": {},
+  "browser": {
+    "assert": "nanoassert"
+  },
+  "dependencies": {
+    "nanoassert": "^1.1.0"
+  },
   "devDependencies": {
     "noop2": "^2.0.0",
     "nyc": "^15.0.0",
